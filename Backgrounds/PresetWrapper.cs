@@ -13,7 +13,7 @@ namespace Kyzlyyk.Backgrounds
 
         public Type GetTargetPresetType(int index)
         {
-            return Utils.GetUnityType(Presets[index].GetTargetFullTypeName());
+            return SystemHelpers.GetUnityType(Presets[index].GetTargetFullTypeName());
         }
 
         public void Apply(Component component, int index)

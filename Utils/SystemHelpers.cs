@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Kyzlyyk.Utils
 {
-    public struct Utils
+    public struct SystemHelpers
     {
         public static T[] GetAllInheritedObjects<T>(params object[] constructorArguments)
         {

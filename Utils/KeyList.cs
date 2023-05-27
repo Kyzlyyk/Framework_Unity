@@ -10,7 +10,13 @@ namespace Kyzlyyk.Utils
             Values = new(capacity);
         }
 
-        public int Count { get; private set; }
+        public int Count => _values.Count;
+
+        public TValue this[int index]
+        {
+            get => _values[index];
+            set => _values[index] = value;
+        }
 
         public List<TKey> Keys { get; private set; }
         public List<TValue> Values { get; private set; }
@@ -61,6 +67,39 @@ namespace Kyzlyyk.Utils
             }
 
             return false;
+        }
+
+        public bool Contains(TKey key, out int index)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (_keys[i].Equals(key))
+                {
+                    index = i;
+                    return true;
+                }
+            }
+            index = -1;
+            return false;
+        }
+
+        public bool Contains(TKey key, out TValue value)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (_keys[i].Equals(key))
+                {
+                    value = this[i];
+                    return true;
+                }
+            }
+            value = default;
+            return false;
+        }
+
+        public TKey GetKey(int index)
+        {
+            return _keys[index];
         }
     }
 }

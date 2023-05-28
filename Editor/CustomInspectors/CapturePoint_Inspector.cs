@@ -1,4 +1,4 @@
-using Gameplay.Modes.Capture;
+using Kyzlyk.LifeSupportModules.Enhancements;
 using UnityEngine;
 
 namespace UnityEditor

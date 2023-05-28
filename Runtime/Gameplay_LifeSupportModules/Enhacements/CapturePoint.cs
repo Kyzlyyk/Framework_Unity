@@ -5,14 +5,10 @@ using System.Linq;
 using Kyzlyk.Helpers;
 using JetBrains.Annotations;
 using System.Collections.Generic;
-using Kyzlyk.LifeSupportModules.Player
+using Kyzlyk.LifeSupportModules.ICapturer
 
-namespace Gameplay.Modes.Capture
+namespace Kyzlyk.LifeSupportModules.Enhancements
 {
-    //if you don't want to be tied to the Player component,
-    //then change the Player component to the ICapturer interface with the 'ID' and 'Group' properties
-    //or use another way to check the equality of groups and objects.
-
     [RequireComponent(typeof(AIAreaDetector))]
     public class CapturePoint : MonoBehaviour
     {
@@ -99,21 +95,21 @@ namespace Gameplay.Modes.Capture
                 }
             }
 
-            int playerDifference = _capturerTeams[largetGroupIndex].Capturers.Count;
+            int capturerDifference = _capturerTeams[largetGroupIndex].Capturers.Count;
 
             for (int i = 0; i < _capturerTeams.Count; i++)
             {
                 if (i == largetGroupIndex) continue;
 
-                playerDifference -= _capturerTeams[i].Capturers.Count;
+                capturerDifference -= _capturerTeams[i].Capturers.Count;
             }
 
-            return ((playerDifference * _percentageIncreaser), largestGroup);
+            return ((capturerDifference * _percentageIncreaser), largestGroup);
         }
 
         private void DetectionArea_EntityEntered(Collider2D[] before, Collider2D[] after)
         {
-            Player target = FindUniqeCapturer(after, before);
+            ICapturer target = FindUniqeCapturer(after, before);
 
             void AddNewTeam()
             {
@@ -137,7 +133,7 @@ namespace Gameplay.Modes.Capture
 
         private void DetectionArea_EntityExited(Collider2D[] before, Collider2D[] after)
         {
-            Player target = FindUniqeCapturer(after, before);
+            ICapturer target = FindUniqeCapturer(after, before);
 
             if (_capturerTeams.Contains(target.Group, out Team team))
             {
@@ -150,13 +146,13 @@ namespace Gameplay.Modes.Capture
         }
 
         [CanBeNull]
-        private Player FindUniqeCapturer(Collider2D[] first, Collider2D[] second)
+        private ICapturer FindUniqeCapturer(Collider2D[] first, Collider2D[] second)
         {
             if (first.Length > second.Length)
-                return first.Except(second, new PlayerEqualityComparer()).FirstOrDefault().gameObject.GetComponent<Player>();
+                return first.Except(second, new ICapturerEqualityComparer()).FirstOrDefault().gameObject.GetComponent<ICapturer>();
             
             else if (second.Length > first.Length)
-                return second.Except(first, new PlayerEqualityComparer()).FirstOrDefault().gameObject.GetComponent<Player>();
+                return second.Except(first, new ICapturerEqualityComparer()).FirstOrDefault().gameObject.GetComponent<ICapturer>();
 
             return null;
         }
@@ -168,9 +164,9 @@ namespace Gameplay.Modes.Capture
 
         private class Team
         {
-            public List<Player> Capturers { get; } = new List<Player>(2);
+            public List<ICapturer> Capturers { get; } = new List<ICapturer>(2);
 
-            public bool TryAddCapturer(Player capturer)
+            public bool TryAddCapturer(ICapturer capturer)
             {
                 if (Capturers.Any(c => c.ID == capturer.ID)) return false;
                 
@@ -179,29 +175,29 @@ namespace Gameplay.Modes.Capture
             }
         }
 
-        private struct PlayerEqualityComparer : IEqualityComparer<Collider2D>
+        private struct ICapturerEqualityComparer : IEqualityComparer<Collider2D>
         {
             public bool Equals(Collider2D x, Collider2D y)
             {
-                return x.gameObject.GetComponent<Player>().ID == y.gameObject.GetComponent<Player>().ID;
+                return x.gameObject.GetComponent<ICapturer>().ID == y.gameObject.GetComponent<ICapturer>().ID;
             }
 
             public int GetHashCode(Collider2D obj)
             {
-                return obj.gameObject.GetComponent<Player>().ID;
+                return obj.gameObject.GetComponent<ICapturer>().ID;
             }
         }
 
         public class PointOwnerEventArgs : EventArgs
         {
-            public PointOwnerEventArgs(char group, IEnumerable<Player> capturers)
+            public PointOwnerEventArgs(char group, IEnumerable<ICapturer> capturers)
             {
                 Group = group;
                 Capturers = capturers;
             }
 
             public char Group { get; }
-            public IEnumerable<Player> Capturers { get; }
+            public IEnumerable<ICapturer> Capturers { get; }
         }
     }
 }

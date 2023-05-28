@@ -2,11 +2,12 @@ using System;
 using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
+using Kyzlyk.LifeSupportModules.Enhancements;
 
 namespace Kyzlyk.LifeSupportModules.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public sealed class Player : MonoBehaviour, IComparable<Player>
+    public sealed class Player : MonoBehaviour, IComparable<Player>, ICapturer
     {
         [SerializeField] private char _group;
         [SerializeField] private Joystick _joystick;

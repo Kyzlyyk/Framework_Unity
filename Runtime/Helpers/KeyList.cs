@@ -51,6 +51,19 @@ namespace Kyzlyk.Helpers
             return false;
         }
 
+        public TValue GetValue(TKey key)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (_keys[i].Equals(key))
+                {
+                    return _values[i];
+                }
+            }
+
+            return default;
+        }
+
         public bool Contains(TKey key)
         {
             for (int i = 0; i < Count; i++)

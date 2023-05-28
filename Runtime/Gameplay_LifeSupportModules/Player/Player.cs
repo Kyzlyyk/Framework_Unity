@@ -11,7 +11,7 @@ namespace Kyzlyk.LifeSupportModules.Player
         [SerializeField] private char _group;
         [SerializeField] private Joystick _joystick;
 
-        public int Index { get; private set; }
+        public int ID { get; private set; }
         public char Group => _group;
 
         public ITurnSwitchable TurnSwitchable { get; private set; }
@@ -24,7 +24,7 @@ namespace Kyzlyk.LifeSupportModules.Player
         {
             _rigidbody = GetComponent<Rigidbody2D>();
 
-            Index = GetHashCode();
+            ID = GetHashCode();
 
             MonoBehaviour[] allComponents = GetComponents<MonoBehaviour>();
 
@@ -73,7 +73,7 @@ namespace Kyzlyk.LifeSupportModules.Player
 
         public int CompareTo(Player other)
         {
-            return (other.Index > this.Index) ? other.Index : this.Index;
+            return (other.ID > this.ID) ? other.ID : this.ID;
         }
     }
 }

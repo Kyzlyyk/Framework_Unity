@@ -3,17 +3,20 @@ using UnityEngine;
 using Kyzlyk.Helpers.Utils;
 using UnityEditor.Presets;
 
-namespace Kyzlyk.LifeSupportModules.DynamicBackground
+namespace Kyzlyk.LifeSupportModules.DynamicFX.PresetComposing
 {
     [Serializable]
     public class PresetWrapper
     {
-        public BackgroundStyle Style;
-        public Preset[] Presets;
+        [SerializeField] private Preset[] _presets;
+        [SerializeField] private PresetStyle _style;
+
+        public Preset[] Presets => _presets;
+        public PresetStyle Style => _style;
 
         public Type GetTargetPresetType(int index)
         {
-            return UnityUtils.GetUnityType(Presets[index].GetTargetFullTypeName());
+            return UnityUtility.GetUnityType(Presets[index].GetTargetFullTypeName());
         }
 
         public void Apply(Component component, int index)

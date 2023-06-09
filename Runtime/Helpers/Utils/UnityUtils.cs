@@ -85,5 +85,16 @@ namespace Kyzlyk.Helpers.Utils
 
             return implementors.ToArray();
         }
+
+        public static void LeaveOnly<TInterface>(MonoBehaviour[] scripts) where TInterface : class
+        {
+            for (int i = 0; i < scripts.Length; i++)
+            {
+                if (scripts[i].gameObject.TryGetComponent<TInterface>(out var script))
+                    scripts[i] = script as MonoBehaviour;
+                else
+                    scripts[i] = null;
+            }
+        }
     }
 }

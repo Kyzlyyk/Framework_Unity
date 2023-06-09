@@ -8,14 +8,6 @@ namespace Kyzlyk.LifeSupportModules.Player
         Player Player { get; set; }
     }
 
-    public interface ITurnSwitchable : IPlayerComponent
-    {
-        event EventHandler OnTurnEnd;
-
-        void EndTurn();
-        void StartTurn();
-    }
-
     public interface IJoystickHolder : IPlayerComponent
     {
         Joystick Joystick { get; set; }

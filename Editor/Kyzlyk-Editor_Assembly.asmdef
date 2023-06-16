@@ -1,0 +1,16 @@
+{
+    "name": "Kyzlyk-Editor_Assembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e93285f8c9d619d4bab7d90fa53f6f3d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

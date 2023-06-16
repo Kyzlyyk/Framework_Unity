@@ -1,8 +1,7 @@
-using Helpers;
-using UnityEngine;
-using Helpers.Utils;
 using System;
-using System.Collections.Generic;
+using UnityEngine;
+using Kyzlyk.Helpers;
+using Kyzlyk.Helpers.Utils;
 
 namespace Kyzlyk.AI
 {
@@ -23,7 +22,7 @@ namespace Kyzlyk.AI
 
         public bool AnyEntityDetected => AllDetectedEntities.Length > 0;
         
-        public delegate void EntityDetectionHandler(Collider2D[] updatedEntities);
+        public delegate void EntityDetectionHandler(Collider2D[] before, Collider2D[] after);
         public event EntityDetectionHandler EntityExited;
         public event EntityDetectionHandler EntityEntered;
         
@@ -56,7 +55,7 @@ namespace Kyzlyk.AI
 
             if (lastCount > colliders.Length)
             {
-                EntityExited?.Invoke(colliders);
+                EntityExited?.Invoke(AllDetectedEntities, colliders);
                 AllDetectedEntities = colliders;
 
                 return;
@@ -66,12 +65,12 @@ namespace Kyzlyk.AI
             {
                 if (AllDetectedEntities.Length > 0)
                     AllDetectedEntities = Array.Empty<Collider2D>();
-                
+
                 return;
             }
 
             if (lastCount < colliders.Length)
-                EntityEntered?.Invoke(colliders);
+                EntityEntered?.Invoke(AllDetectedEntities, colliders);
 
             AllDetectedEntities = colliders;
         }

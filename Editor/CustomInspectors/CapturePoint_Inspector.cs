@@ -1,5 +1,5 @@
-using Kyzlyk.LifeSupportModules.Enhancements;
 using UnityEngine;
+using Kyzlyk.LSGSystem.InteractiveObjects;
 
 namespace UnityEditor
 {

@@ -1,12 +1,11 @@
 #if UNITY_EDITOR
 
-using Helpers;
-using Helpers.Utils;
 using UnityEngine;
+using Kyzlyk.Helpers;
+using Kyzlyk.Helpers.Utils;
 
 namespace UnityEditor
 {
-
     public class AreaDrawer : MonoBehaviour
     {
         [SerializeField] private bool _enable;

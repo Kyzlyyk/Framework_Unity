@@ -1,16 +1,8 @@
 using UnityEngine;
 
-public class ReadOnlyPropertyAttribute : PropertyAttribute
+namespace Kyzlyk.Attributes
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ReadOnlyPropertyAttribute : PropertyAttribute
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

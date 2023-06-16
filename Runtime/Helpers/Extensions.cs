@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using GSystems.Breaking;
 using System.Collections.Generic;
 using System.Collections;
+using Kyzlyk.LSGSystem.Breaking;
 
 namespace Kyzlyk.Helpers.Extensions
 {
@@ -39,6 +39,27 @@ namespace Kyzlyk.Helpers.Extensions
         {
             return new Vector2(Mathf.Round(vector2.x), Mathf.Round(vector2.y));
         }
+
+        /// <summary>
+        /// return Mathf.Abs(f) / Mathf.Max(f, 1)
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
+        public static float GetDirection(this float f)
+            => Mathf.Abs(f) / Mathf.Max(f, 1);
+
+        /// <summary>
+        /// return Mathf.Abs(i) / Mathf.Max(i, 1)
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static int GetDirection(this int i)
+            => Mathf.Abs(i) / Mathf.Max(i, 1);
+
+        public static bool IsOdd(this int i)
+            => i % 2 == 0;
+
+        public static bool IsNullOrEmpty<T>(this T[] array) => array == null || array.Length == 0;
 
         public static void ForEach<T>(this T[] array, Action<T> action)
         {
@@ -130,6 +151,66 @@ namespace Kyzlyk.Helpers.Extensions
             Vector3 viewPos = camera.WorldToViewportPoint(objectPosition);
 
             return viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0;
-        }  
+        }
+
+        public static TObject[] GetObjectsFromArray<TObject, TArray>(this TArray[] array, Func<TArray, TObject> match)
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+            else if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            TObject[] objects = new TObject[array.Length];
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                TObject obj = match(array[i]);
+                if (obj == null)
+                    continue;
+                else
+                    objects[i] = obj;
+            }
+
+            return objects;
+        }
+
+        public static IList<TObject> GetObjectsFromArray<TObject, TArray>(this IList<TArray> array, Func<TArray, TObject> match)
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+            else if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            List<TObject> objects = new(array.Count);
+
+            for (int i = 0; i < array.Count; i++)
+            {
+                TObject obj = match(array[i]);
+                if (obj == null)
+                    continue;
+                else
+                    objects.Add(obj);
+            }
+
+            return objects;
+        }
+
+        public static IEnumerable<TObject> GetObjectsFromArray<TObject, TArray>(this IEnumerable<TArray> array, Func<TArray, TObject> match)
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+            else if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            foreach (var item in array)
+            {
+                TObject obj = match(item);
+
+                if (obj == null)
+                    continue;
+                else
+                    yield return obj;
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 
-using GSystems.AI;
-using Helpers;
+using Kyzlyk.AI;
+using Kyzlyk.Helpers;
 using UnityEngine;
 
 namespace UnityEditor

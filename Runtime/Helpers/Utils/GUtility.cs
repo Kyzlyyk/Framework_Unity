@@ -1,6 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+
 namespace Kyzlyk.Helpers.Utils
 {
-    public struct Utility
+    public struct GUtility
     {
         public delegate (int Left, int Right) Converter<T>(T left, T right);
 

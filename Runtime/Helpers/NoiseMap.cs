@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Helpers.Extensions;
 using UnityEngine;
 using System.Collections;
+using Kyzlyk.Helpers.Extensions;
 
 namespace Kyzlyk.Helpers
 {

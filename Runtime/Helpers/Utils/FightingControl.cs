@@ -1,4 +1,4 @@
-using GSystems.Entities;
+using System;
 using UnityEngine;
 
 namespace Kyzlyk.Helpers.Utils
@@ -9,7 +9,7 @@ namespace Kyzlyk.Helpers.Utils
     internal struct FightingControl
     {
 #nullable enable
-        public static (IEntityDataProvider?, float) FindNearestEntity(IEntityDataProvider[] entities, Vector2 origin)
+        public static (Transform?, float) FindNearestEntity(Transform[] entities, Vector2 origin)
         {
             if (entities == null || entities.Length == 0)
                 return (null, -1);
@@ -17,11 +17,11 @@ namespace Kyzlyk.Helpers.Utils
             float nearestDistance = -1;
             float currentDistance;
 
-            IEntityDataProvider nearestEnemy = entities[0];
+            Transform nearestEnemy = entities[0];
 
             for (int i = 0; i < entities.Length; i++)
             {
-                currentDistance = Vector2.Distance(origin, entities[i].CurrentPosition);
+                currentDistance = Vector2.Distance(origin, entities[i].transform.position);
 
                 if (nearestDistance < currentDistance)
                 {
@@ -34,37 +34,38 @@ namespace Kyzlyk.Helpers.Utils
             return (nearestEnemy, nearestDistance);
         }
 
-        public static (IEntityDataProvider?, float) FindNearestEnemy(IEntityDataProvider[] entities, Vector2 origin, bool isRightSide)
+        [Obsolete]
+        public static (Transform?, float) FindNearestObject(Transform[] entities, Vector2 origin, bool isRightSide)
         {
             if (entities == null || entities.Length == 0)
                 return (null, -1);
 
-            IEntityDataProvider[] sideEnemies = new IEntityDataProvider[entities.Length];
+            Transform[] sideEnemies = new Transform[entities.Length];
 
             for (int i = 0; i < entities.Length; i++)
             {
                 if (entities[i] == null)
                     continue;
 
-                if (isRightSide && origin.x < entities[i].CurrentPosition.x)
+                if (isRightSide && origin.x < entities[i].transform.position.x)
                     sideEnemies[i] = entities[i];
 
-                else if (!isRightSide && origin.x > entities[i].CurrentPosition.x)
+                else if (!isRightSide && origin.x > entities[i].transform.position.x)
                     sideEnemies[i] = entities[i];
             }
 
-            IEntityDataProvider nearestEnemy = sideEnemies[0];
+            Transform nearestEnemy = sideEnemies[0];
 
             float currentDistance;
 
-            float nearestDistance = Vector2.Distance(origin, sideEnemies[0].CurrentPosition);
+            float nearestDistance = Vector2.Distance(origin, sideEnemies[0].transform.position);
 
             for (int i = 1; i < sideEnemies.Length; i++)
             {
                 if (sideEnemies[i] == null)
                     continue;
 
-                currentDistance = Vector2.Distance(origin, sideEnemies[i].CurrentPosition);
+                currentDistance = Vector2.Distance(origin, sideEnemies[i].transform.position);
 
                 if (currentDistance < nearestDistance)
                 {

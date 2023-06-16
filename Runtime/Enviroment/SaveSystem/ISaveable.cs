@@ -1,6 +1,6 @@
 namespace Kyzlyk.Enviroment.SaveSystem
 {
-    internal interface ISaveable
+    public interface ISaveable
     {
         string SavedObjectKey { get; }
 

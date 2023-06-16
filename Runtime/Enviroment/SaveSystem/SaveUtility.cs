@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Kyzlyk.Enviroment.SaveSystem
 {
-    internal static class SaveUtility
+    public static class SaveUtility
     {
         private static string GeneratePath(string fileName) => Application.persistentDataPath + "/" + fileName + ".ky";
 

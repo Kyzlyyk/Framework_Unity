@@ -2,7 +2,6 @@ using Kyzlyk.Helpers.Utils;
 using Kyzlyk.Helpers.Extensions;
 using System.Linq;
 using UnityEngine;
-using Kyzlyk.Helpers;
 
 namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
 {
@@ -14,7 +13,7 @@ namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
 
         private void Awake()
         {
-            _preseters = GLOBAL_CONSTANTS.AllScriptsOnScene.OfType<IPreseter>().ToArray();
+            _preseters = FindObjectsOfType<MonoBehaviour>(true).OfType<IPreseter>().ToArray();
         }
 
         public void ApplyAllPresets(PresetStyle presetStyle) => _preseters.ForEach(p => p.ApplyPreset(presetStyle));

@@ -1,4 +1,3 @@
-using Kyzlyk.Helpers;
 using System.Linq;
 using UnityEngine;
 using Kyzlyk.Helpers.Extensions;
@@ -15,7 +14,7 @@ namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
         {
             _presetLinker = GetComponent<PresetLinker>();
 
-            _styleChangers = GLOBAL_CONSTANTS.AllScriptsOnScene.OfType<IPresetStyleChanger>().ToArray();
+            _styleChangers = FindObjectsOfType<MonoBehaviour>(true).OfType<IPresetStyleChanger>().ToArray();
             _styleChangers.ForEach(sc => sc.OnStyleChange += OnStyleChange);
         }
 

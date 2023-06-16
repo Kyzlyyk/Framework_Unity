@@ -88,8 +88,8 @@ namespace Kyzlyk.LSGSystem.Breaking
 
             MeshStructure meshStructure = _dimension switch
             {
-                Dimension.TwoD => MeshUtility.GetSquare((Vector2)positionInt, Vertices.Count),
-                Dimension.ThreeD => MeshUtility.GetCube((Vector2)positionInt, Vertices.Count),
+                Dimension.TwoD => GMeshUtility.GetSquare((Vector2)positionInt, Vertices.Count),
+                Dimension.ThreeD => GMeshUtility.GetCube((Vector2)positionInt, Vertices.Count),
                 
                 _ => null,
             };

@@ -76,9 +76,9 @@ namespace Kyzlyk.LSGSystem.Breaking.Modules
         private static void SetPath(MeshStructure meshStructure, Element pathSet, Dimension dimension)
         {
             if (dimension == Dimension.ThreeD)
-                MeshUtility.AddCube(meshStructure, pathSet.Position, pathSet.Scale);
+                GMeshUtility.AddCube(meshStructure, pathSet.Position, pathSet.Scale);
             else if (dimension == Dimension.TwoD)
-                MeshUtility.AddSquare(meshStructure, pathSet.Position, pathSet.Scale);
+                GMeshUtility.AddSquare(meshStructure, pathSet.Position, pathSet.Scale);
         }
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Kyzlyk.Helpers.GMesh
 {
-    public struct MeshUtility
+    public struct GMeshUtility
     {
         public static void AddCube(MeshStructure meshStructure, Vector3 position, float scale = 1)
         {

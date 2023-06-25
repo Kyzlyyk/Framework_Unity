@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
+using Kyzlyk.Helpers.Math;
 using Kyzlyk.LSGSystem.Breaking;
+using System.Collections.Generic;
 
 namespace Kyzlyk.Helpers.Extensions
 {
@@ -81,7 +81,7 @@ namespace Kyzlyk.Helpers.Extensions
         {
             float distance = Vector2.Distance(from, to);
 
-            Vector2 direction = Utils.MathUtility.GetVector(from, to);
+            Vector2 direction = MathUtility.GetVector(from, to);
 
             Vector2 nextPosition = new();
 
@@ -106,13 +106,22 @@ namespace Kyzlyk.Helpers.Extensions
             {
                 int j = rnd.Next(i + 1);
 
-                T temp = arr[j];
-
-                arr[i] = arr[j];
-                arr[j] = temp;
+                (arr[i], arr[j]) = (arr[j], arr[i]);
             }
         }
         
+        public static void Shuffle<T>(this IList<T> arr)
+        {
+            System.Random rnd = new();
+
+            for (int i = arr.Count - 1; i >= 0; i--)
+            {
+                int j = rnd.Next(i + 1);
+
+                (arr[j], arr[i]) = (arr[i], arr[j]);
+            }
+        }
+
         public static T[] GetShuffledArray<T>(this T[] arr)
         {
             System.Random rnd = new();

@@ -1,7 +1,7 @@
-using Kyzlyk.AI;
-using Kyzlyk.Helpers.Utils;
 using System;
+using Kyzlyk.AI;
 using UnityEngine;
+using Kyzlyk.Helpers.Math;
 
 namespace Kyzlyk.LSGSystem.InteractiveObjects.Affectors
 {

@@ -2,7 +2,7 @@
 
 using UnityEngine;
 using Kyzlyk.Helpers;
-using Kyzlyk.Helpers.Utils;
+using Kyzlyk.Helpers.Math;
 
 namespace UnityEditor
 {

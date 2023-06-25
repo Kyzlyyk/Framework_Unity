@@ -1,3 +1,8 @@
+using Kyzlyk.Helpers.Extensions;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace Kyzlyk.Helpers.Utils
 {
     public struct OrientationUtility
@@ -48,6 +53,26 @@ namespace Kyzlyk.Helpers.Utils
                 Direction.Down => Vertical.Down,
                 _ => Vertical.Zero
             };
+        }
+
+        public static Vector2 GetRandomVector()
+        {
+            Vector2[] vectors =
+            {
+                Vector2.up, Vector2.left, Vector2.down, Vector2.right
+            };
+
+            return vectors.Random();
+        }
+
+        public static Direction GetRandomDirection()
+        {
+            Direction[] directions =
+            {
+                Direction.Up, Direction.Left, Direction.Down, Direction.Right
+            };
+
+            return directions.Random();
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Kyzlyk.Helpers.Utils
+namespace Kyzlyk.Helpers.Math
 {
     public readonly struct MathUtility
     {

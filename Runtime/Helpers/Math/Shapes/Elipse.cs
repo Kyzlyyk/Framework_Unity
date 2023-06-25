@@ -6,7 +6,25 @@ namespace Kyzlyk.Helpers.Math
 {
     public class Elipse : Shape, IEnumerator<Vector2>
     {
-        public Elipse(Vector2 center, Vector2 size, int points)
+        public Elipse(Vector2 center, Vector2 size, int points, bool normalized = false)
+        {
+            _currentIndex = 0;
+            Size = size;
+            Center = center;
+
+            Points = new Vector2[points];
+            
+            Vector2[] elipse = MathUtility.GetElipseMap(center, size, points);
+            for (int i = 0; i < elipse.Length; i++)
+            {
+                if (normalized)
+                    Points[i] = elipse[i].normalized;
+                else
+                    Points[i] = elipse[i];
+            }
+        }
+        
+        protected Elipse(Vector2 center, Vector2 size, int points)
         {
             _currentIndex = 0;
             Size = size;

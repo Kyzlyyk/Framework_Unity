@@ -62,14 +62,19 @@ namespace Kyzlyk.Helpers.Math
         
         public static Vector2[] GetCircleMap(Vector2 center, float radius, int segments)
         {
+            return GetElipseMap(center, new Vector2(radius, radius), segments);
+        }
+        
+        public static Vector2[] GetElipseMap(Vector2 center, Vector2 size, int segments)
+        {
             Vector2[] circlePoints = new Vector2[segments];
 
             float angleIncrement = 2 * Mathf.PI / segments;
             for (int i = 0; i < segments; i++)
             {
                 float angle = i * angleIncrement;
-                float x = radius * Mathf.Cos(angle);
-                float y = radius * Mathf.Sin(angle);
+                float x = Mathf.Cos(angle) * size.x;
+                float y = Mathf.Sin(angle) * size.y;
                 circlePoints[i] = new Vector2(x, y) + center;
             }
 

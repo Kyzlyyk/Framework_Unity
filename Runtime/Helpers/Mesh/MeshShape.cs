@@ -1,15 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Kyzlyk.Helpers.Math;
+using System.Collections.Generic;
 
 namespace Kyzlyk.Helpers.GMesh
 {
-    public enum ShapeType
-    {
-        Triangle = 0,
-        Square = 1,
-    }
-
     public class MeshShape
     {
         public MeshShape(IEnumerable<Vector3> vertices, IEnumerable<int> triangles)
@@ -21,20 +16,20 @@ namespace Kyzlyk.Helpers.GMesh
             _triangles = triangles;
         }
 
-        public MeshShape(Vector3[] vertices, ShapeType shape)
+        public MeshShape(Vector3[] vertices, Shape2DType shape)
         {
             Vertices = vertices;
 
             int verticesCount = Vertices.Count();
             _triangles = shape switch
             {
-                ShapeType.Square => new int[]
+                Shape2DType.Square => new int[]
                 {
                     verticesCount - 4, verticesCount - 3, verticesCount - 2,
                     verticesCount - 3, verticesCount - 1, verticesCount - 2
                 },
 
-                ShapeType.Triangle => new int[]
+                Shape2DType.Triangle => new int[]
                 {
                     verticesCount - 3, verticesCount - 2, verticesCount - 1
                 },

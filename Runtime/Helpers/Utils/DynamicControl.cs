@@ -5,19 +5,6 @@ namespace Kyzlyk.Helpers.Utils
 {
     public struct DynamicControl
     {
-        public static IEnumerator MoveToTargetByLerp(Transform toApply, Vector2 targetPosition, float time)
-        {
-            float elapsedTime = 0f;
-
-            while (true)
-            {
-                toApply.transform.position = Vector3.Lerp(toApply.transform.position, targetPosition, (elapsedTime / time));
-
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-        }
-
         public static IEnumerator MoveToTarget(Transform toApply, Vector2 targetPosition, Clip frame)
         {
             Vector3 offsetPosition = (targetPosition - (Vector2)toApply.transform.position) / frame.Frames;
@@ -30,10 +17,17 @@ namespace Kyzlyk.Helpers.Utils
             }
         }
 
-        //TODO
-        public static IEnumerator MoveToTarget(Transform toApply, Vector2 targetPosition, Clip frame, float overclock)
+        public static IEnumerator MoveToTarget(Transform toApply, Vector2 targetPosition, float speed)
         {
-            yield break;
+            const float threshold = 0.05f;
+
+            while (Vector3.Distance(toApply.position, targetPosition) > threshold)
+            {
+                toApply.position = Vector3.Lerp(toApply.position, targetPosition, speed * Time.deltaTime);
+                yield return null;
+            }
+
+            toApply.position = targetPosition;
         }
 
         public static IEnumerator SpinAround(Transform toApply, short times, Clip frameBetweenSpinsAround, short direction = 1)
@@ -51,17 +45,6 @@ namespace Kyzlyk.Helpers.Utils
                     yield return new WaitForSeconds(frameBetweenSpinsAround.Delay);
                 }
             }
-        }
-
-        public static IEnumerator Spin(Transform toApply, float alphaAngle, float duration)
-        {
-            yield break;
-        }
-
-        // TODO require to complete.....
-        public static IEnumerator Spin(Transform toApply, Vector3 targetAngles, float duration, short overclocking)
-        {
-            yield break;
         }
     }
 }

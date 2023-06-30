@@ -19,7 +19,7 @@ namespace Kyzlyk.Helpers.Math
 
         public override float GetPerimeter()
         {
-            return Mathf.PI * (3 * (Size.x + Size.y) - Mathf.Sqrt((3 * Size.x + Size.y) * (Size.x + 3 * Size.y)));
+            return Mathf.PI * (3f * (Size.x + Size.y) - Mathf.Sqrt((3f * Size.x + Size.y) * (Size.x + 3f * Size.y)));
         }
 
         public override float GetArea()
@@ -31,7 +31,7 @@ namespace Kyzlyk.Helpers.Math
         {
             Vector2[] circlePoints = new Vector2[segments];
 
-            float angleIncrement = 2 * Mathf.PI / segments;
+            float angleIncrement = 2f * Mathf.PI / segments;
             for (int i = 0; i < segments; i++)
             {
                 float angle = i * angleIncrement;

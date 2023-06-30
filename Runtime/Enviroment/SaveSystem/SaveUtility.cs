@@ -3,13 +3,26 @@ using System.IO;
 using UnityEngine;
 using System.Globalization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace Kyzlyk.Enviroment.SaveSystem
 {
     public static class SaveUtility
     {
-        private static string GeneratePath(string fileName) => Application.persistentDataPath + "/" + fileName + ".ky";
+        private static string Extension => ".ky";
+        
+        private static string GeneratePath(string fileName)
+        {
+            StringBuilder builder = new(fileName.Length + Extension.Length + Application.persistentDataPath.Length + 1);
+            builder
+                .Append(Application.persistentDataPath)
+                .Append('/')
+                .Append(fileName)
+                .Append(Extension);
 
+            return builder.ToString();
+        }
+        
         public static void SaveDateTime(string key, DateTime value)
         {
             string dateTimeString = value.ToString("u", CultureInfo.InvariantCulture);
@@ -54,7 +67,7 @@ namespace Kyzlyk.Enviroment.SaveSystem
                 return true;
             }
 
-            //Debug.LogError("The file not found in " + path);
+            //Debug.LogAssertion("The file not found in " + path);
             resultData = null;
 
             return false;
@@ -62,8 +75,7 @@ namespace Kyzlyk.Enviroment.SaveSystem
 
         public static void DeleteData(string key)
         {
-            string path = GeneratePath(key);
-            File.Delete(path);
+            File.Delete(GeneratePath(key));
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace Kyzlyk.LSGSystem.InteractiveObjects
 {
-    public interface IEffectorController
+    public interface IAffectorController
     {
         void Pause();
         void Resume();

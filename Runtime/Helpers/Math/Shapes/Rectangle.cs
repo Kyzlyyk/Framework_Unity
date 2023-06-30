@@ -10,7 +10,7 @@ namespace Kyzlyk.Helpers.Math
             Center = center;
             Size = size;
 
-            Points = GetRectangleMap(center, size, points / 4);
+            Points = GetRectangleMap(center, size, Mathf.CeilToInt(points / 4f));
         }
 
         public override Vector2 Size { get; }
@@ -31,7 +31,7 @@ namespace Kyzlyk.Helpers.Math
         public static Vector2[] GetRectangleMap(Vector2 center, Vector2 size, int sideLength)
         {
             List<Vector2> points = new(sideLength * 4);
-
+            
             Vector2 passage = new(center.x - (size.x / 2f), center.y + (size.y / 2f));
 
             // Left side

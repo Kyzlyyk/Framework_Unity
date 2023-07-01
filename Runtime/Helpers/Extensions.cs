@@ -77,7 +77,7 @@ namespace Kyzlyk.Helpers.Extensions
             }
         }
 
-        public static int RandomRange(int minInclusive, int maxInclusive, params int[] exclusions)
+        public static int RandomRange(int minInclusive, int maxInclusive, bool throwException, params int[] exclusions)
         {
             int value;
             int repeated = 0;
@@ -87,7 +87,12 @@ namespace Kyzlyk.Helpers.Extensions
                 value = UnityEngine.Random.Range(minInclusive, maxInclusive + 1);
 
                 if (repeated >= exclusions.Length)
-                    throw new Exception("The parameter 'exclusion' contains all numbers in range between 'minInclusive' and 'maxInclusive'!");
+                {
+                    if (throwException)
+                        throw new Exception("The parameter 'exclusion' contains all numbers in range between 'minInclusive' and 'maxInclusive'!");
+                    else
+                        return 0;
+                }
 
                 repeated++;
             }
@@ -102,7 +107,7 @@ namespace Kyzlyk.Helpers.Extensions
 
             for (int i = 0; i < leave; i++)
             {
-                randomIndexes[i] = RandomRange(0, arr.Length - 1, randomIndexes);
+                randomIndexes[i] = RandomRange(0, arr.Length - 1, false, randomIndexes);
             }
 
             T[] randomizedArray = new T[randomIndexes.Length];
@@ -180,20 +185,22 @@ namespace Kyzlyk.Helpers.Extensions
             return newArr;
         }
 
-        public static T[] Remove<T>(this T[] arr, T value)
+        public static T[] Remove<T>(this T[] array, T value)
         {
-            T[] newArray = new T[arr.Length - 1];
-
-            for (int i = 0, j = 0; i < arr.Length; i++, j++)
+            int index = Array.IndexOf(array, value);
+            if (index == -1)
             {
-                if (arr[i].Equals(value))
-                    continue;
-
-                newArray[j] = arr[i];
+                return array;
             }
+
+            T[] newArray = new T[array.Length - 1];
+            
+            Array.Copy(array, 0, newArray, 0, index);
+            Array.Copy(array, index + 1, newArray, index, array.Length - index - 1);
 
             return newArray;
         }
+
 
         public static T[] Extract<T>(this T[] arr, int startIndexInclusive, int endIndexInclusive)
         {

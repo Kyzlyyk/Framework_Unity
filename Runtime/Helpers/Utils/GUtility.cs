@@ -193,13 +193,5 @@ namespace Kyzlyk.Helpers.Utils
 
             return baseType;
         }
-
-        public static int OneIfZeroOrValue(int value)
-        {
-            if (value == 0)
-                return 1;
-
-            return value;
-        }
     }
 }

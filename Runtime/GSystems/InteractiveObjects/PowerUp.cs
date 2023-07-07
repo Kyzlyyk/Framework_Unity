@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Kyzlyk.LSGSystem.InteractiveObjects.PowerUps
+namespace Kyzlyk.GSystems.InteractiveObjects.PowerUps
 {
     public abstract class PowerUp : MonoBehaviour
     {

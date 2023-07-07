@@ -1,4 +1,4 @@
-namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
+namespace Kyzlyk.GSystems.DynamicFX.PresetComposing
 {
     public delegate void StyleHandler(PresetStyle style);
 

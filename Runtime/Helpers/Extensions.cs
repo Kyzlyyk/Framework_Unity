@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
 using System.Linq;
-using Kyzlyk.Helpers.Math;
-using Kyzlyk.LSGSystem.Breaking;
 using System.Collections.Generic;
 
 namespace Kyzlyk.Helpers.Extensions
@@ -17,7 +15,21 @@ namespace Kyzlyk.Helpers.Extensions
 
         public static Vector2 Floor(this Vector2 vector2)
             => new(Mathf.Floor(vector2.x), Mathf.Floor(vector2.y));
-        
+
+        public static bool IsZero(this Vector2 vector2)
+            => vector2.x == 0 && vector2.y == 0;
+
+        public static bool IsAnyNull<T>(this IEnumerable<T> array) where T : class
+        {
+            foreach (var item in array)
+            {
+                if (item == null)
+                    return true;
+            }
+
+            return false;
+        }        
+
         public static T Random<T>(this IReadOnlyList<T> array)
         {
             if (array.Count == 0)
@@ -25,22 +37,38 @@ namespace Kyzlyk.Helpers.Extensions
 
             return array[UnityEngine.Random.Range(0, array.Count)];
         }
-
-        public static Vector3 ToVector3(this Vector2 vector2, float z)
-            => new(vector2.x, vector2.y, z);
-
-        public static Vector3 Abs(this Vector3 vector3)
-            => new(Mathf.Abs(vector3.x), Mathf.Abs(vector3.y));
-
-        public static Vector2 ToVector2(this float f)
-            => new(f, f);
         
-        public static Vector2Int ToVector2Int(this int i)
-            => new(i, i);
+        public static bool Random<T>(this IReadOnlyList<T> array, out T value)
+        {
+            if (array.Count == 0)
+            {
+                value = default;
+                return false;
+            }
+
+            value = array[UnityEngine.Random.Range(0, array.Count)];
+            return true;
+        }
+
+        public static Vector3 ToVector3(this Vector2 vector2, float z) => new(vector2.x, vector2.y, z);
+        public static Vector3 Abs(this Vector3 vector3) => new(Mathf.Abs(vector3.x), Mathf.Abs(vector3.y));
+        public static Vector2 ToVector2(this float f) => new(f, f);
+        public static Vector2Int ToVector2Int(this int i) => new(i, i);
 
         public static bool Compare(this Vector2 vector2, Vector2 toCompare)
         {
             return Mathf.Approximately(vector2.x, toCompare.x) && Mathf.Approximately(vector2.y, toCompare.y);
+        }
+        
+        public static bool CompareByIntComparison(this Vector2 vector2, Vector2 toCompare)
+        {
+            return Vector2Int.RoundToInt(vector2) == Vector2Int.RoundToInt(toCompare);
+        }
+        
+        public static bool Compare(this Vector2 vector2, Vector2 other, float tolerance)
+        {
+            tolerance = Mathf.Abs(tolerance);
+            return (Mathf.Abs(vector2.x - other.x) <= tolerance) && (Mathf.Abs(vector2.x - other.x) <= tolerance);
         }
 
         public static Vector2 Round(this Vector2 vector2)
@@ -48,10 +76,18 @@ namespace Kyzlyk.Helpers.Extensions
             return new Vector2(Mathf.Round(vector2.x), Mathf.Round(vector2.y));
         }
 
-        public static bool IsOdd(this int i)
-            => i % 2 == 0;
+        public static bool IsOdd(this int i) => i % 2 == 0;
 
         public static bool IsNullOrEmpty<T>(this T[] array) => array == null || array.Length == 0;
+
+        public static void ForEachAsSpan<T>(this List<T> list, Action<T> action)
+        {
+            Span<T> span = list is null ? default : new Span<T>(list.ToArray(), 0, list.Count);
+            for (int i = 0; i < span.Length; i++)
+            {
+                action(span[i]);
+            }
+        }
 
         public static void ForEach<T>(this T[] array, Action<T> action)
         {
@@ -101,8 +137,16 @@ namespace Kyzlyk.Helpers.Extensions
             return value;
         }
 
-        public static T[] RandomizeArray<T>(this T[] arr, int leave)
+        public static T[] RandomizeArray<T>(this T[] arr, int leave, bool throwException = true)
         {
+            if (leave > arr.Length || leave < 0)
+            {
+                if (throwException)
+                    throw new Exception("Leave is grater than 'array' size or less than 0!");
+
+                return arr;
+            }
+            
             int[] randomIndexes = new int[leave];
 
             for (int i = 0; i < leave; i++)
@@ -118,26 +162,6 @@ namespace Kyzlyk.Helpers.Extensions
             }
             
             return randomizedArray;
-        }
-
-        public static (bool, Vector2) CheckWay(this Builder builder, Vector2 from, Vector2 to)
-        {
-            float distance = Vector2.Distance(from, to);
-
-            Vector2 direction = MathUtility.GetVector(from, to);
-            Vector2 nextPosition = new();
-
-            for (int i = 0; i < distance; i++)
-            {
-                nextPosition = (from + new Vector2(i, i) * (direction / distance)).Floor();
-
-                if (builder.HasGMaterial(nextPosition))
-                {
-                    return (true, nextPosition);
-                }
-            }
-
-            return (false, nextPosition);
         }
 
         public static void Shuffle<T>(this T[] arr)
@@ -315,6 +339,30 @@ namespace Kyzlyk.Helpers.Extensions
                 else
                     yield return obj;
             }
+        }
+
+        public static Vector2 ScreenToWorldPoint2D(this Camera camera, Vector3 point)
+        {
+            point.z = Mathf.Abs(camera.transform.position.z);
+            return camera.ScreenToWorldPoint(point);
+        }
+
+        public static Vector2 ScreenToWorldPoint3D(this Camera camera, Vector3 point)
+        {
+            return camera.ScreenPointToRay(point).GetPoint(Mathf.Abs(camera.transform.position.z));
+        }
+
+        public static TFind FindIn<T, TFind>(this IEnumerable<T> array, Func<T, (TFind, bool)> match)
+        {
+            foreach (T item in array)
+            {
+                (TFind findedObject, bool isFind) = match(item);
+
+                if (isFind)
+                    return findedObject;
+            }
+
+            return default;
         }
     }
 }

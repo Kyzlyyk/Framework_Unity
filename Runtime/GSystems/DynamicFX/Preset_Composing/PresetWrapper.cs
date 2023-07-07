@@ -3,7 +3,7 @@ using UnityEngine;
 using Kyzlyk.Helpers.Utils;
 using UnityEditor.Presets;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
+namespace Kyzlyk.GSystems.DynamicFX.PresetComposing
 {
     [Serializable]
     public class PresetWrapper

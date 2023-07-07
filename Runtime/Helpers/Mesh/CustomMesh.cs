@@ -12,7 +12,7 @@ namespace Kyzlyk.Helpers.GMesh
         protected readonly List<int> Triangles = new();
         protected readonly List<Vector2> UVs = new();
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             Mesh = new Mesh();
             GetComponent<MeshFilter>().mesh = Mesh;

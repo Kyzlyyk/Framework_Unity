@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.BackgroundComposing
+namespace Kyzlyk.GSystems.DynamicFX.BackgroundComposing
 {
     public sealed class BackgroundSwitcher : MonoBehaviour
     {

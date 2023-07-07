@@ -3,7 +3,7 @@ using Kyzlyk.Helpers.Extensions;
 using System.Linq;
 using UnityEngine;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
+namespace Kyzlyk.GSystems.DynamicFX.PresetComposing
 {
     public class PresetLinker : MonoBehaviour
     {

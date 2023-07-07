@@ -13,7 +13,14 @@ namespace Kyzlyk.Helpers.Math
         }
 
         public override Vector2 Size { get; }
-        public override Quaternion Rotation { get; }
+        public override Vector3 Rotation
+        {
+            get
+            {
+                VectorNormalized radian = (VectorNormalized)GetElipseMap_Normalized(Size, Points.Length)[CurrentIndex];
+                return new Vector3(0f, 0f, radian.X + radian.Y);
+            }
+        }
         public override Vector2 Center { get; }
         public override Vector2[] Points { get; }
 
@@ -41,6 +48,11 @@ namespace Kyzlyk.Helpers.Math
             }
 
             return circlePoints;
+        }
+        
+        public static Vector2[] GetElipseMap_Normalized(Vector2 size, int segments)
+        {
+            return GetElipseMap(Vector2.zero, size.normalized, segments);
         }
     }
 }

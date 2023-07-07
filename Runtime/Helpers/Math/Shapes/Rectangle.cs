@@ -14,7 +14,7 @@ namespace Kyzlyk.Helpers.Math
         }
 
         public override Vector2 Size { get; }
-        public override Quaternion Rotation { get; }
+        public override Vector3 Rotation { get; }
         public override Vector2 Center { get; }
         public override Vector2[] Points { get; }
 

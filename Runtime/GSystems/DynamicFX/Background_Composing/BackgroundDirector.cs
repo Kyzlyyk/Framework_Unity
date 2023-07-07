@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.BackgroundComposing
+namespace Kyzlyk.GSystems.DynamicFX.BackgroundComposing
 {
     [RequireComponent(typeof(BackgroundSwitcher))]
     public abstract class BackgroundDirector : MonoBehaviour

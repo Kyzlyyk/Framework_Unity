@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Kyzlyk.LSGSystem.InteractiveObjects.PowerUps
+namespace Kyzlyk.GSystems.InteractiveObjects.PowerUps
 {
     [RequireComponent(typeof(Collider2D))]
     public class PowerUpShell_Trigger : MonoBehaviour

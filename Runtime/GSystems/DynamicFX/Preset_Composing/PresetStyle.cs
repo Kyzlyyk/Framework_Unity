@@ -1,6 +1,6 @@
 using System;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
+namespace Kyzlyk.GSystems.DynamicFX.PresetComposing
 {
     [Serializable]
     public struct PresetStyle

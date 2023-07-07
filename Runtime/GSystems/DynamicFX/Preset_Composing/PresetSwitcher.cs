@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using Kyzlyk.Helpers.Extensions;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
+namespace Kyzlyk.GSystems.DynamicFX.PresetComposing
 {
     [RequireComponent(typeof(PresetLinker))]
     internal sealed class PresetSwitcher : MonoBehaviour

@@ -1,4 +1,4 @@
-namespace Kyzlyk.LSGSystem.InteractiveObjects
+namespace Kyzlyk.GSystems.InteractiveObjects
 {
     public interface IAffectorController
     {

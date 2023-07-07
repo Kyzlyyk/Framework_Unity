@@ -95,5 +95,19 @@ namespace Kyzlyk.Helpers.Utils
         {
             return Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0f, 0f));
         }
+
+        public static IList<T> GetAllObjectsOnScene<T>(bool includeInactive = true) where T : class
+        {
+            List<T> values = new List<T>();
+
+            MonoBehaviour[] scripts = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>(includeInactive);
+            for (int i = 0; i < scripts.Length; i++)
+            {
+                if (scripts[i] is T script)
+                    values.Add(script);
+            }
+
+            return values;
+        }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.PresetComposing
+namespace Kyzlyk.GSystems.DynamicFX.PresetComposing
 {
     public interface IPreseter
     {

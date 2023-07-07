@@ -7,31 +7,31 @@ namespace Kyzlyk.Helpers.Math
     public abstract class Shape2D : IEnumerator<Vector2>
     {
         public abstract Vector2 Size { get; }
-        public abstract Quaternion Rotation { get; }
+        public abstract Vector3 Rotation { get; }
         public abstract Vector2 Center { get; }
         public abstract Vector2[] Points { get; }
 
         public abstract float GetPerimeter();
         public abstract float GetArea();
 
-        public Vector2 Current => Points[_currentIndex];
+        public Vector2 Current => Points[CurrentIndex];
 
-        private int _currentIndex;
+        protected int CurrentIndex;
 
         object IEnumerator.Current => Current;
 
-        public bool MoveNext()
+        public virtual bool MoveNext()
         {
-            if (_currentIndex >= Points.Length)
+            if (CurrentIndex >= Points.Length)
                 return false;
 
-            _currentIndex++;
+            CurrentIndex++;
             return true;
         }
 
         public void Reset()
         {
-            _currentIndex = 0;
+            CurrentIndex = 0;
         }
 
         public void Dispose()

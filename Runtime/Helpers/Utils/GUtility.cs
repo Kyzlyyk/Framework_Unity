@@ -193,5 +193,17 @@ namespace Kyzlyk.Helpers.Utils
 
             return baseType;
         }
+
+        public static int ConvertStringToInt(string str)
+        {
+            int result = 0;
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                result += (int)str[i];
+            }
+
+            return result;
+        }
     }
 }

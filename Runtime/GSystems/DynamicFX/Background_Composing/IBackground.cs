@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Kyzlyk.LSGSystem.DynamicFX.BackgroundComposing
+namespace Kyzlyk.GSystems.DynamicFX.BackgroundComposing
 {
     public interface IBackground
     {

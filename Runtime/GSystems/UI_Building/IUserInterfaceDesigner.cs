@@ -1,6 +1,6 @@
 ﻿namespace Kyzlyk.GSystems.UI_Building
 {
-    public interface IElementsDOM
+    public interface IUserInterfaceDesigner
     {
         void ReturnControl<T>() where T : Element;
         void LockAll();

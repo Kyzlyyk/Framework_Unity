@@ -4,11 +4,11 @@ namespace Kyzlyk.GSystems.UI_Building
 {
     public abstract class Element : MonoBehaviour
     {
-        private IElementsDOM _dom;
-        internal protected IElementsDOM DOM
+        private IUserInterfaceDesigner _interface;
+        internal protected IUserInterfaceDesigner Interface
         {
-            get => _dom;
-            set => _dom ??= value;
+            get => _interface;
+            set => _interface ??= value;
         }
 
         public abstract void InitRender();

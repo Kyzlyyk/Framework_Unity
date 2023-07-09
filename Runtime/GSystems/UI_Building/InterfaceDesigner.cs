@@ -3,24 +3,25 @@ using Kyzlyk.Helpers.Extensions;
 
 namespace Kyzlyk.GSystems.UI_Building
 {
-    public class DOM : MonoBehaviour, IElementsDOM
+    public class InterfaceDesigner : MonoBehaviour, IUserInterfaceDesigner
     {
-        private Element[] _dom;
+        private Element[] _elements;
 
-        protected virtual void InitializeDOM(ref Element[] dom)
+        protected virtual void InitializeInterface(ref Element[] elements)
         {
-            dom = new Element[0];
+            elements = new Element[0];
         }
 
         private void Awake()
         {
-            InitializeDOM(ref _dom);
+            InitializeInterface(ref _elements);
 
-            for (int i = 0; i < _dom.Length; i++)
+            for (int i = 0; i < _elements.Length; i++)
             {
-                _dom[i].DOM = this;
+                _elements[i].Interface = this;
+                _elements[i].InitRender();
 
-                if (_dom[i] is Element element and IParentElement parentElement)
+                if (_elements[i] is Element element and IParentElement parentElement)
                     for (int j = 0; j < parentElement.Childrens.Length; j++)
                     {
                         if (!parentElement.Childrens[j].TrySetParent(element))
@@ -35,55 +36,55 @@ namespace Kyzlyk.GSystems.UI_Building
 
         public void Lock<T>() where T : Element
         {
-            for (int i = 0; i < _dom.Length; i++)
+            for (int i = 0; i < _elements.Length; i++)
             {
-                if (_dom[i] is T elementToLock)
+                if (_elements[i] is T elementToLock)
                     elementToLock.Lock();
             }
         }
 
         public void Unlock<T>() where T : Element
         {
-            for (int i = 0; i < _dom.Length; i++)
+            for (int i = 0; i < _elements.Length; i++)
             {
-                if (_dom[i] is T elementToUnlock)
+                if (_elements[i] is T elementToUnlock)
                     elementToUnlock.Unlock();
             }
         }
 
         public void LockAllExcept<T>() where T : Element
         {
-            for (int i = 0; i < _dom.Length; i++)
+            for (int i = 0; i < _elements.Length; i++)
             {
-                if (_dom[i] is T) continue;
+                if (_elements[i] is T) continue;
 
-                _dom[i].Lock();
+                _elements[i].Lock();
             }
         }
 
         public void UnlockAllExcept<T>() where T : Element
         {
-            for (int i = 0; i < _dom.Length; i++)
+            for (int i = 0; i < _elements.Length; i++)
             {
-                if (_dom[i] is T) continue;
+                if (_elements[i] is T) continue;
 
-                _dom[i].Unlock();
+                _elements[i].Unlock();
             }
         }
 
         public void LockAll()
         {
-            for (int i = 0; i < _dom.Length; i++)
+            for (int i = 0; i < _elements.Length; i++)
             {
-                _dom[i].Lock();
+                _elements[i].Lock();
             }
         }
 
         public void UnlockAll()
         {
-            for (int i = 0; i < _dom.Length; i++)
+            for (int i = 0; i < _elements.Length; i++)
             {
-                _dom[i].Unlock();
+                _elements[i].Unlock();
             }
         }
     }

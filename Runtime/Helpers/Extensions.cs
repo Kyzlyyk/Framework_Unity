@@ -55,9 +55,9 @@ namespace Kyzlyk.Helpers.Extensions
         public static Vector2 ToVector2(this float f) => new(f, f);
         public static Vector2Int ToVector2Int(this int i) => new(i, i);
 
-        public static bool Compare(this Vector2 vector2, Vector2 toCompare)
+        public static bool Compare(this Vector2 vector2, Vector2 other)
         {
-            return Mathf.Approximately(vector2.x, toCompare.x) && Mathf.Approximately(vector2.y, toCompare.y);
+            return Mathf.Approximately(vector2.x, other.x) && Mathf.Approximately(vector2.y, other.y);
         }
         
         public static bool CompareByIntComparison(this Vector2 vector2, Vector2 toCompare)

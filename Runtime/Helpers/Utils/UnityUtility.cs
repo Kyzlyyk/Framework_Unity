@@ -109,5 +109,20 @@ namespace Kyzlyk.Helpers.Utils
 
             return values;
         }
+
+        public static Color GetRandomColor()
+        {
+            static float Random() => UnityEngine.Random.Range(0f, 1f);
+            
+            return new Color(Random(), Random(), Random());
+        }
+
+        public static void ClearDebugConsole()
+        {
+            Assembly assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            Type type = assembly.GetType("UnityEditor.LogEntries");
+            MethodInfo method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
+        }
     }
 }

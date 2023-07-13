@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Linq;
+using rnd = UnityEngine;
 using System.Collections.Generic;
 
 namespace Kyzlyk.Helpers.Extensions
@@ -35,7 +36,7 @@ namespace Kyzlyk.Helpers.Extensions
             if (array.Count == 0)
                 return default;
 
-            return array[UnityEngine.Random.Range(0, array.Count)];
+            return array[rnd::Random.Range(0, array.Count)];
         }
         
         public static bool Random<T>(this IReadOnlyList<T> array, out T value)
@@ -46,7 +47,7 @@ namespace Kyzlyk.Helpers.Extensions
                 return false;
             }
 
-            value = array[UnityEngine.Random.Range(0, array.Count)];
+            value = array[rnd::Random.Range(0, array.Count)];
             return true;
         }
 
@@ -120,7 +121,7 @@ namespace Kyzlyk.Helpers.Extensions
 
             do
             {
-                value = UnityEngine.Random.Range(minInclusive, maxInclusive + 1);
+                value = rnd::Random.Range(minInclusive, maxInclusive + 1);
 
                 if (repeated >= exclusions.Length)
                 {

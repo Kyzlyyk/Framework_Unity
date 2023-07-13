@@ -17,7 +17,7 @@ namespace Kyzlyk.Helpers.Math
         {
             get
             {
-                VectorNormalized radian = (VectorNormalized)GetElipseMap_Normalized(Size, Points.Length)[CurrentIndex];
+                UnitVector radian = (UnitVector)GetElipseMap_Normalized(Size, Points.Length)[CurrentIndex];
                 return new Vector3(0f, 0f, radian.X + radian.Y);
             }
         }

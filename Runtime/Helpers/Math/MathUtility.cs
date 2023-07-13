@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
+using static UnityEngine.Mathf;
 
 namespace Kyzlyk.Helpers.Math
 {
@@ -14,7 +15,7 @@ namespace Kyzlyk.Helpers.Math
 
             for (int i = 0; i < resolution; i++)
             {
-                float y = amplitude * Mathf.Sin(2 * Mathf.PI * frequency * x + phase);
+                float y = amplitude * Sin(2 * PI * frequency * x + phase);
 
                 points[i] = new Vector2(x, y) + origin;
                 x += incrementX;
@@ -25,13 +26,13 @@ namespace Kyzlyk.Helpers.Math
 
         public static Vector2[] GetTangensoidMap(Vector2 origin, float xMax, float xMin, float amplitude, float frequency, float phase, float yOffset, int resolution)
         {
-            List<Vector2> points = new List<Vector2>(resolution);
+            List<Vector2> points = new(resolution);
 
             float xStep = (xMax - xMin) / (float)resolution;
 
             for (float x = xMin; x <= xMax; x += xStep)
             {
-                float y = amplitude * Mathf.Tan(frequency * (x + phase)) + yOffset;
+                float y = amplitude * Tan(frequency * (x + phase)) + yOffset;
                 points.Add(new Vector2(x, y) + origin);
             }
 
@@ -54,7 +55,7 @@ namespace Kyzlyk.Helpers.Math
 
         public static Vector2[] GetParabolaMap(Vector2 origin, float a, float b, float c, float minX, float maxX, int resolution)
         {
-            List<Vector2> points = new List<Vector2>();
+            List<Vector2> points = new();
 
             float stepSize = (maxX - minX) / resolution;
 
@@ -67,10 +68,45 @@ namespace Kyzlyk.Helpers.Math
             return points.ToArray();
         }
 
+        public static Vector2 GetVector(Vector2 origin, UnitVector direction, float length)
+        {
+            direction.Normalize_Internal();
+            return new Vector2(origin.x + direction.X * length, origin.y + direction.Y * length);
+        }
+
+        public static float Angle180To360(float angle)
+        {
+            return angle < 0 ? 360f - Abs(angle) : angle;
+        }
+        
+        public static float Angle360To180(float angle)
+        {
+            if (angle > 180f && angle <= 360f)
+                return angle - 360f;
+
+            return angle;
+        }
+
+        public static Vector2 RotateVector(Vector2 vectorToRotate, float angle)
+        {
+            float radians = DegToRad(angle);
+            float cos = Cos(radians);
+            float sin = Sin(radians);
+
+            return new Vector2(
+                x: vectorToRotate.x * cos - vectorToRotate.y * sin,
+                y: vectorToRotate.x * sin + vectorToRotate.y * cos);
+        }
+
+        public static UnitVector RotateVector(UnitVector vectorToRotate, float angle)
+        {
+            return (UnitVector)RotateVector((Vector2)vectorToRotate, angle);
+        }
+
+        public static float DegToRad(float degrees) => degrees * Deg2Rad;
+        public static float RadToDeg(float rad) => rad * Rad2Deg;
         public static Vector2 GetVector(Vector2 a, Vector2 b) => b - a;
-
         public static Vector3 GetVector(Vector3 a, Vector3 b) => b - a;
-
-        public static float ToRadius(Vector2 size) => (size.x + size.y) / Mathf.PI;
+        public static float ToRadius(Vector2 size) => (size.x + size.y) / PI;
     }
 }

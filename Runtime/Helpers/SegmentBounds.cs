@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Kyzlyk.Helpers
 {
-    public struct Segment
+    public readonly struct Segment
     {
         public Segment(Vector2 a, Vector2 b)
         {
@@ -10,8 +10,13 @@ namespace Kyzlyk.Helpers
             B = b;
         }
 
-        public Vector2 A;
-        public Vector2 B;
+        public Vector2 A { get; }
+        public Vector2 B { get; }
+
+        public override string ToString()
+        {
+            return $"{A} :A - {Vector2.Distance(A, B)} - B: {B}";
+        }
     }
     
     public readonly struct SegmentBounds

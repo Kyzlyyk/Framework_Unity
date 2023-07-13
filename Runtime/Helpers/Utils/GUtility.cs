@@ -200,10 +200,13 @@ namespace Kyzlyk.Helpers.Utils
 
             for (int i = 0; i < str.Length; i++)
             {
-                result += (int)str[i];
+                result += str[i];
             }
 
             return result;
         }
+
+        public static int BoolToSign(bool b) => b ? 1 : -1;
+        public static float BoolToSignF(bool b) => b ? 1f : -1f;
     }
 }

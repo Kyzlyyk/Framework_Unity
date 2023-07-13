@@ -1,5 +1,3 @@
-using System;
-
 namespace Kyzlyk.Helpers
 {
     public interface IRangeable
@@ -29,7 +27,7 @@ namespace Kyzlyk.Helpers
             return false;
         }
     }
-    
+
     public readonly struct Range
     {
         public Range(int startValue, int length)
@@ -57,6 +55,11 @@ namespace Kyzlyk.Helpers
                 return true;
 
             return false;
+        }
+        
+        public int Random()
+        {
+            return UnityEngine.Random.Range(StartValue, EndValue + 1);
         }
     }
 }

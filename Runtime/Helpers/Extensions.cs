@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using rnd = UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Kyzlyk.Helpers.Extensions
 {
@@ -69,7 +70,7 @@ namespace Kyzlyk.Helpers.Extensions
         public static bool Compare(this Vector2 vector2, Vector2 other, float tolerance)
         {
             tolerance = Mathf.Abs(tolerance);
-            return (Mathf.Abs(vector2.x - other.x) <= tolerance) && (Mathf.Abs(vector2.x - other.x) <= tolerance);
+            return (Mathf.Abs(vector2.x - other.x) <= tolerance) && (Mathf.Abs(vector2.y - other.y) <= tolerance);
         }
 
         public static Vector2 Round(this Vector2 vector2)
@@ -112,6 +113,18 @@ namespace Kyzlyk.Helpers.Extensions
             {
                 action?.Invoke(item);
             }
+        }
+
+        public static List<T> Where_List<T>(this T[] array, Func<T, bool> func)
+        {
+            List<T> list = new List<T>(array.Length);
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (func(array[i]))
+                    list.Add(array[i]);
+            }
+            
+            return list;
         }
 
         public static int RandomRange(int minInclusive, int maxInclusive, bool throwException, params int[] exclusions)
@@ -225,7 +238,14 @@ namespace Kyzlyk.Helpers.Extensions
 
             return newArray;
         }
-
+        
+        public static T[] RemoveLast<T>(this T[] array)
+        {
+            T[] newArray = new T[array.Length - 1];
+            Array.Copy(array, newArray, array.Length - 1);
+            
+            return newArray;
+        }
 
         public static T[] Extract<T>(this T[] arr, int startIndexInclusive, int endIndexInclusive)
         {
@@ -241,7 +261,7 @@ namespace Kyzlyk.Helpers.Extensions
         
         public static T[] Cut<T>(this T[] arr, int startIndexInclusive, int endIndexInclusive)
         {
-            T[] cutedArray = new T[endIndexInclusive - startIndexInclusive + 1];
+            T[] cutedArray = new T[endIndexInclusive - startIndexInclusive + 2];
 
             for (int i = 0, j = 0; i < arr.Length; i++)
             {
@@ -364,6 +384,31 @@ namespace Kyzlyk.Helpers.Extensions
             }
 
             return default;
+        }
+
+        public static void Shake(this Camera camera, float duration, float magnitude, MonoBehaviour coroutineExecutor)
+        {
+            Vector3 origin = camera.transform.localPosition;
+
+            IEnumerator Shake_Coroutine()
+            {
+                float elapsedTime = 0f;
+
+                while (elapsedTime < duration)
+                {
+                    float x = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+                    float y = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+
+                    camera.transform.localPosition = origin + new Vector3(x, y);
+
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+
+                camera.transform.localPosition = origin;
+            }
+
+            coroutineExecutor.StartCoroutine(Shake_Coroutine());
         }
     }
 }

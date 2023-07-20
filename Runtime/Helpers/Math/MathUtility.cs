@@ -52,6 +52,22 @@ namespace Kyzlyk.Helpers.Math
 
             return points;
         }
+        
+        public static Vector2[] GetLineMap(Vector2 origin, UnitVector vector, int segments)
+        {
+            Vector2 b = GetVector(origin, vector, segments);
+
+            Vector2[] points = new Vector2[segments + 1];
+            float segmentLength = 1f / segments;
+
+            for (int i = 0; i <= segments; i++)
+            {
+                float t = i * segmentLength;
+                points[i] = Vector2.Lerp(origin, b, t);
+            }
+
+            return points;
+        }
 
         public static Vector2[] GetParabolaMap(Vector2 origin, float a, float b, float c, float minX, float maxX, int resolution)
         {

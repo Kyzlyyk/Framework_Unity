@@ -206,6 +206,21 @@ namespace Kyzlyk.Helpers.Utils
             return result;
         }
 
+        public static int GetMaxFromEnum<T>() where T : Enum
+        {
+            Array enumElements = Enum.GetValues(typeof(T));
+
+            int max = 0;
+            for (int i = 0; i < enumElements.Length; i++)
+            {
+                int currentValue = (int)enumElements.GetValue(i);
+                if (currentValue > max)
+                    max = currentValue;
+            }
+
+            return max;
+        }
+
         public static int BoolToSign(bool b) => b ? 1 : -1;
         public static float BoolToSignF(bool b) => b ? 1f : -1f;
     }

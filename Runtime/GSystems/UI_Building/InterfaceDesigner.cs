@@ -1,18 +1,56 @@
 ﻿using UnityEngine;
 using Kyzlyk.Helpers.Extensions;
+using Kyzlyk.Helpers.Core;
 
 namespace Kyzlyk.GSystems.UI_Building
 {
-    public class InterfaceDesigner : MonoBehaviour, IUserInterfaceDesigner
+    public abstract class InterfaceDesigner : Singleton<InterfaceDesigner>
     {
+        [SerializeField] private float _delayToTransitToHoldingState;
+
         private Element[] _elements;
 
-        protected virtual void InitializeInterface(ref Element[] elements)
-        {
-            elements = new Element[0];
-        }
+        public delegate void PointerHanlder(object sender, Touch touch);
+        public event PointerHanlder OnScreenTouched;
+        public event PointerHanlder OnScreenReleased;
 
-        private void Awake()
+        private bool _pointerDown;
+        private float _holdingTimer;
+        
+        public bool IsHolding => _holdingTimer >= _delayToTransitToHoldingState && _pointerDown;
+        private Touch _lastTouch;
+
+        private int _lastTouchCount;
+
+        protected override bool IsPersistance => false;
+
+        private void Update()
+        {
+            if (_pointerDown)
+            {
+                _holdingTimer += Time.deltaTime;
+            }
+
+            if (Input.touchCount > 0)
+            {
+                _lastTouch = Input.GetTouch(0);
+                if (_lastTouchCount == 0)
+                {
+                    _lastTouchCount = Input.touchCount;
+                    OnPointerDown(_lastTouch);
+                }
+            }
+            
+            else if (Input.touchCount == 0 && _lastTouchCount > 0)
+            {
+                _lastTouchCount = Input.touchCount;
+                OnPointerUp(_lastTouch);
+            }
+        }
+        
+        protected abstract void InitializeInterface(ref Element[] elements);
+
+        protected void Draw()
         {
             InitializeInterface(ref _elements);
 
@@ -30,9 +68,23 @@ namespace Kyzlyk.GSystems.UI_Building
             }
         }
 
-        public void ReturnControl<T>() where T : Element
+        private void OnPointerUp(Touch touch)
         {
+            OnScreenReleased(this, touch);
+            _holdingTimer = 0f;
+            _pointerDown = false;
         }
+
+        private void OnPointerDown(Touch touch)
+        {
+            OnScreenTouched(this, touch);
+            _pointerDown = true;
+        }
+
+        /// <summary>
+        /// Use when you want clear your preferences.
+        /// </summary>
+        public abstract void ReturnControl();
 
         public void Lock<T>() where T : Element
         {
@@ -52,24 +104,29 @@ namespace Kyzlyk.GSystems.UI_Building
             }
         }
 
-        public void LockAllExcept<T>() where T : Element
+        public void LockAllExcept<T>(bool exceptChild = true) where T : Element
         {
             for (int i = 0; i < _elements.Length; i++)
             {
-                if (_elements[i] is T) continue;
+                if (CheckToExcept<T>(_elements[i], exceptChild)) continue;
 
                 _elements[i].Lock();
             }
         }
 
-        public void UnlockAllExcept<T>() where T : Element
+        public void UnlockAllExcept<T>(bool exceptChild = true) where T : Element
         {
             for (int i = 0; i < _elements.Length; i++)
             {
-                if (_elements[i] is T) continue;
+                if (CheckToExcept<T>(_elements[i], exceptChild)) continue;
 
                 _elements[i].Unlock();
             }
+        }
+
+        private bool CheckToExcept<T>(Element element, bool exceptChild) where T : Element
+        {
+            return element is T || (exceptChild && (element is IChildrenElement<T>));
         }
 
         public void LockAll()

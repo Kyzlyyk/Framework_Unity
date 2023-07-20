@@ -42,9 +42,19 @@ namespace Kyzlyk.Helpers.Math
             }
         }
 
-        public readonly static UnitVector Zero = new(0f, 0f);
-        public readonly static UnitVector One = new(1f, 1f);
-        public readonly static UnitVector MinusOne = new(-1f, -1f);
+        public static UnitVector Zero => new(0f, 0f);
+        public static UnitVector One => new(1f, 1f);
+        public static UnitVector MinusOne => new(-1f, -1f);
+        
+        public static UnitVector Up => new(0f, 1f);
+        public static UnitVector Down => new(0f, -1f);
+        public static UnitVector Left => new(-1f, 0f);
+        public static UnitVector Right => new(1f, 0f);
+        
+        public static UnitVector UpRight => new(1f, 1f);
+        public static UnitVector DownRight => new(1f, -1f);
+        public static UnitVector UpLeft => new(-1f, 1f);
+        public static UnitVector DownLeft => new(-1f, -1f);
 
         public float X => _x;
         public float Y => _y;
@@ -53,6 +63,12 @@ namespace Kyzlyk.Helpers.Math
 
         private float _x;
         private float _y;
+
+        public bool Compare(UnitVector other, float tolerance)
+        {
+            tolerance = IsUnit(tolerance) ? Abs(tolerance) : 0f;
+            return (Abs(_x - other._x) <= tolerance) && (Abs(_y - other._y) <= tolerance);
+        }
 
         public static bool IsUnit(float f, float scale = 1f)
         {
@@ -155,6 +171,11 @@ namespace Kyzlyk.Helpers.Math
         public static UnitVector operator -(UnitVector a, UnitVector b) => new(a._x - b._x, a._y - b._y);
         public static UnitVector operator +(UnitVector a) => new UnitVector(Abs(a.X), Abs(a.Y));
         public static UnitVector operator +(UnitVector a, UnitVector b) => new(a._x + b._x, a._y + b._y);
+        
+        public static bool operator >(UnitVector a, UnitVector b) => (a._x > b._x) && (a._y > b._y);
+        public static bool operator <(UnitVector a, UnitVector b) => (a._x < b._x) && (a._y < b._y);
+        public static bool operator >=(UnitVector a, UnitVector b) => (a._x >= b._x) && (a._y >= b._y);
+        public static bool operator <=(UnitVector a, UnitVector b) => (a._x <= b._x) && (a._y <= b._y);
 
         public static bool operator ==(UnitVector a, UnitVector b) => a.Equals(b);
         public static bool operator !=(UnitVector a, UnitVector b) => !a.Equals(b);

@@ -55,7 +55,7 @@ namespace Kyzlyk.Helpers.Math
         
         public static Vector2[] GetLineMap(Vector2 origin, UnitVector vector, int segments)
         {
-            Vector2 b = GetVector(origin, vector, segments);
+            Vector2 b = GetPoint(origin, vector, segments);
 
             Vector2[] points = new Vector2[segments + 1];
             float segmentLength = 1f / segments;
@@ -84,7 +84,7 @@ namespace Kyzlyk.Helpers.Math
             return points.ToArray();
         }
 
-        public static Vector2 GetVector(Vector2 origin, UnitVector direction, float length)
+        public static Vector2 GetPoint(Vector2 origin, UnitVector direction, float length)
         {
             direction.Normalize_Internal();
             return new Vector2(origin.x + direction.X * length, origin.y + direction.Y * length);
@@ -114,15 +114,38 @@ namespace Kyzlyk.Helpers.Math
                 y: vectorToRotate.x * sin + vectorToRotate.y * cos);
         }
 
+        public static Vector2 RotateVector(Vector2 vectorToRotate, UnitVector direction)
+        {
+            return RotateVector(vectorToRotate, UnitVector.VectorToDeg360(direction));
+        }
+
         public static UnitVector RotateVector(UnitVector vectorToRotate, float angle)
         {
             return (UnitVector)RotateVector((Vector2)vectorToRotate, angle);
         }
 
+        public static Vector2[] GetReflectionPoints(Vector2 currentPosition, UnitVector vector, int reflectionCount, float distance, int layerMask = Physics2D.AllLayers)
+        {
+            List<Vector2> points = new(reflectionCount)
+            {
+                currentPosition
+            };
+
+            for (int i = 0; i < reflectionCount; i++)
+            {
+                RaycastHit2D hit = Physics2D.Raycast(currentPosition, vector, distance, layerMask);
+                points.Add(hit.point);
+
+                vector = (UnitVector)Vector2.Reflect(vector, -hit.normal);
+                currentPosition = hit.point * vector * 0.01f;
+            }
+
+            return points.ToArray();
+        }
+
         public static float DegToRad(float degrees) => degrees * Deg2Rad;
         public static float RadToDeg(float rad) => rad * Rad2Deg;
-        public static Vector2 GetVector(Vector2 a, Vector2 b) => b - a;
-        public static Vector3 GetVector(Vector3 a, Vector3 b) => b - a;
         public static float ToRadius(Vector2 size) => (size.x + size.y) / PI;
+        public static bool Approximately(float a, float b, float tolerance) => Abs(a - b) <= tolerance;
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Kyzlyk.Helpers.GMesh
 {
+    [ExecuteAlways]
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public abstract class MeshContainer<TKey> : CustomMesh
     {
@@ -42,9 +43,9 @@ namespace Kyzlyk.Helpers.GMesh
                 Apply();
         }
 
-        public override void Reset()
+        public override void Clear()
         {
-            base.Reset();
+            base.Clear();
             
             _structure.Clear();
             

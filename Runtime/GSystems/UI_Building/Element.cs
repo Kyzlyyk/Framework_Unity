@@ -15,7 +15,7 @@ namespace Kyzlyk.GSystems.UI_Building
             }
         }
 
-        public abstract void InitRender();
+        public virtual void InitRender() { }
         public abstract void Lock();
         public abstract void Unlock();
     }

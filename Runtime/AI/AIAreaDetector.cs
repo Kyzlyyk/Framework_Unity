@@ -35,6 +35,11 @@ namespace Kyzlyk.AI
             _detectionLayerMask = LayerMask.GetMask(_detectionLayers);
         }
 
+        private void OnValidate()
+        {
+            _detectionLayerMask = LayerMask.GetMask(_detectionLayers);
+        }
+
         private void FixedUpdate()
         {
             OverlapEntities(); 

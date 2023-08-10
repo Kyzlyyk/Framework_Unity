@@ -1,4 +1,5 @@
 using Kyzlyk.Helpers.Extensions;
+using Kyzlyk.Helpers.Math;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,6 +74,19 @@ namespace Kyzlyk.Helpers.Utils
             };
 
             return directions.Random();
+        }
+
+        public static UnitVector ToVector(Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Up => UnitVector.Up,
+                Direction.Right => UnitVector.Right,
+                Direction.Left => UnitVector.Left,
+                Direction.Down => UnitVector.Down,
+
+                _ => UnitVector.Zero
+            };
         }
     }
 }

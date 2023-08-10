@@ -1,9 +1,12 @@
 using System;
 using UnityEngine;
 using System.Linq;
-using rnd = UnityEngine;
+using ue = UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using Kyzlyk.Core;
+using Kyzlyk.Helpers.Math;
+using System.Text;
 
 namespace Kyzlyk.Helpers.Extensions
 {
@@ -12,11 +15,23 @@ namespace Kyzlyk.Helpers.Extensions
         public static Vector2 Ceil(this Vector2 vector2)
             => new(Mathf.Ceil(vector2.x), Mathf.Ceil(vector2.y));
 
-        public static Vector2Int ToVector2Int(this Vector2 vector2)
-            => new(Mathf.FloorToInt(vector2.x), Mathf.FloorToInt(vector2.y));
-
         public static Vector2 Floor(this Vector2 vector2)
             => new(Mathf.Floor(vector2.x), Mathf.Floor(vector2.y));
+
+        public static Vector2 Round(this Vector2 vector2)
+            => new(Mathf.Round(vector2.x), Mathf.Round(vector2.y));
+
+        public static float ToSize(this Vector2 vector2)
+            => vector2.x * vector2.y;
+
+        public static Vector2Int RoundToInt(this Vector3 vector3)
+            => new(Mathf.RoundToInt(vector3.x), Mathf.RoundToInt(vector3.y));
+
+        public static Vector3 ToVector3(this Vector2Int vector2Int, float z = 0f)
+            => new(vector2Int.x, vector2Int.y, z);
+
+        public static int Perimeter(this Vector2Int vector2Int)
+            => vector2Int.x * vector2Int.y;
 
         public static bool IsZero(this Vector2 vector2)
             => vector2.x == 0 && vector2.y == 0;
@@ -30,16 +45,16 @@ namespace Kyzlyk.Helpers.Extensions
             }
 
             return false;
-        }        
+        }
 
         public static T Random<T>(this IReadOnlyList<T> array)
         {
             if (array.Count == 0)
                 return default;
 
-            return array[rnd::Random.Range(0, array.Count)];
+            return array[ue::Random.Range(0, array.Count)];
         }
-        
+
         public static bool Random<T>(this IReadOnlyList<T> array, out T value)
         {
             if (array.Count == 0)
@@ -48,7 +63,7 @@ namespace Kyzlyk.Helpers.Extensions
                 return false;
             }
 
-            value = array[rnd::Random.Range(0, array.Count)];
+            value = array[ue::Random.Range(0, array.Count)];
             return true;
         }
 
@@ -61,24 +76,31 @@ namespace Kyzlyk.Helpers.Extensions
         {
             return Mathf.Approximately(vector2.x, other.x) && Mathf.Approximately(vector2.y, other.y);
         }
-        
-        public static bool CompareByIntComparison(this Vector2 vector2, Vector2 toCompare)
+
+        public static bool Compare(this Vector3 vector3, Vector3 other)
         {
-            return Vector2Int.RoundToInt(vector2) == Vector2Int.RoundToInt(toCompare);
+            return Mathf.Approximately(vector3.x, other.x) && Mathf.Approximately(vector3.y, other.y) && Mathf.Approximately(vector3.z, other.z);
         }
-        
+
         public static bool Compare(this Vector2 vector2, Vector2 other, float tolerance)
         {
             tolerance = Mathf.Abs(tolerance);
             return (Mathf.Abs(vector2.x - other.x) <= tolerance) && (Mathf.Abs(vector2.y - other.y) <= tolerance);
         }
 
-        public static Vector2 Round(this Vector2 vector2)
+        public static bool Compare(this Vector3 vector3, Vector3 other, float tolerance)
         {
-            return new Vector2(Mathf.Round(vector2.x), Mathf.Round(vector2.y));
+            tolerance = Mathf.Abs(tolerance);
+            return (Mathf.Abs(vector3.x - other.x) <= tolerance) && (Mathf.Abs(vector3.y - other.y) <= tolerance) && (Mathf.Abs(vector3.z - other.z) <= tolerance);
         }
 
-        public static bool IsOdd(this int i) => i % 2 == 0;
+        public static bool Compare(this float f, float other, float tolerance)
+        {
+            return Mathf.Abs(f - other) <= Mathf.Abs(tolerance);
+        }
+
+        public static bool IsEven(this int i) => i % 2 == 0;
+        public static bool IsOdd(this int i) => i % 2 == 1;
 
         public static bool IsNullOrEmpty<T>(this T[] array) => array == null || array.Length == 0;
 
@@ -98,7 +120,7 @@ namespace Kyzlyk.Helpers.Extensions
                 action(array[i]);
             }
         }
-        
+
         public static void ForEach<T>(this T[] array, Action<T, int> action)
         {
             for (int i = 0; i < array.Length; i++)
@@ -106,7 +128,7 @@ namespace Kyzlyk.Helpers.Extensions
                 action(array[i], i);
             }
         }
-        
+
         public static void ForEach<T>(this IEnumerable<T> array, Action<T> action)
         {
             foreach (var item in array)
@@ -123,7 +145,7 @@ namespace Kyzlyk.Helpers.Extensions
                 if (func(array[i]))
                     list.Add(array[i]);
             }
-            
+
             return list;
         }
 
@@ -134,7 +156,7 @@ namespace Kyzlyk.Helpers.Extensions
 
             do
             {
-                value = rnd::Random.Range(minInclusive, maxInclusive + 1);
+                value = ue::Random.Range(minInclusive, maxInclusive + 1);
 
                 if (repeated >= exclusions.Length)
                 {
@@ -160,7 +182,7 @@ namespace Kyzlyk.Helpers.Extensions
 
                 return arr;
             }
-            
+
             int[] randomIndexes = new int[leave];
 
             for (int i = 0; i < leave; i++)
@@ -174,7 +196,7 @@ namespace Kyzlyk.Helpers.Extensions
             {
                 randomizedArray[i] = arr[randomIndexes[i]];
             }
-            
+
             return randomizedArray;
         }
 
@@ -189,7 +211,7 @@ namespace Kyzlyk.Helpers.Extensions
                 (arr[i], arr[j]) = (arr[j], arr[i]);
             }
         }
-        
+
         public static void Shuffle<T>(this IList<T> arr)
         {
             System.Random rnd = new();
@@ -232,134 +254,106 @@ namespace Kyzlyk.Helpers.Extensions
             }
 
             T[] newArray = new T[array.Length - 1];
-            
+
             Array.Copy(array, 0, newArray, 0, index);
             Array.Copy(array, index + 1, newArray, index, array.Length - index - 1);
 
             return newArray;
         }
-        
+
         public static T[] RemoveLast<T>(this T[] array)
         {
             T[] newArray = new T[array.Length - 1];
             Array.Copy(array, newArray, array.Length - 1);
-            
+
             return newArray;
         }
 
-        public static T[] Extract<T>(this T[] arr, int startIndexInclusive, int endIndexInclusive)
+        public static T[] AddLast<T>(this T[] array, T value, ArrayActionToHandleNull actionIfNull = ArrayActionToHandleNull.ThrowException)
         {
-            T[] cutedArray = new T[endIndexInclusive - startIndexInclusive + 1];
-
-            for (int i = startIndexInclusive, j = 0; i <= endIndexInclusive; i++, j++)
+            if (array == null)
             {
-                cutedArray[j] = arr[i];
+                if (actionIfNull == ArrayActionToHandleNull.CreateNew)
+                    return new T[1] { value };
+
+                else if (actionIfNull == ArrayActionToHandleNull.ThrowException)
+                    throw new ArgumentNullException("The array is null to add something!");
             }
 
-            return cutedArray;
+            T[] newArray = new T[array.Length + 1];
+            Array.Copy(array, newArray, array.Length);
+            newArray[^1] = value;
+
+            return newArray;
         }
-        
-        public static T[] Cut<T>(this T[] arr, int startIndexInclusive, int endIndexInclusive)
-        {
-            T[] cutedArray = new T[endIndexInclusive - startIndexInclusive + 2];
 
-            for (int i = 0, j = 0; i < arr.Length; i++)
-            {
-                if (i >= startIndexInclusive && i <= endIndexInclusive)
-                    continue;
-
-                cutedArray[j] = arr[i];
-                j++;
-            }
-
-            return cutedArray;
-        }
-        
         public static T[] Cut<T>(this T[] arr, int index)
         {
             return arr.Cut(index, index);
         }
-        
-        public static IEnumerable<T> Extract<T>(this IEnumerable<T> arr, int startIndexInclusive, int endIndexInclusive)
+
+        public static T[] Cut<T>(this T[] array, int startIndexInclusive, int endIndexInclusive)
         {
-            return arr.ToArray().Extract<T>(startIndexInclusive, endIndexInclusive);
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+
+            if (startIndexInclusive < 0 || startIndexInclusive >= array.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndexInclusive), "Start index is out of range.");
+
+            if (endIndexInclusive < 0 || endIndexInclusive >= array.Length)
+                throw new ArgumentOutOfRangeException(nameof(endIndexInclusive), "End index is out of range.");
+
+            if (startIndexInclusive > endIndexInclusive)
+                throw new ArgumentException("Start index cannot be greater than end index.");
+
+            int length = endIndexInclusive - startIndexInclusive + 1;
+            T[] result = new T[length];
+
+            Array.Copy(array, startIndexInclusive, result, 0, length);
+
+            return result;
         }
-        
+
         public static IEnumerable<T> Cut<T>(this IEnumerable<T> arr, int startIndexInclusive, int endIndexInclusive)
         {
             return arr.ToArray().Cut(startIndexInclusive, endIndexInclusive);
         }
-        
+
         public static IEnumerable<T> Cut<T>(this IEnumerable<T> arr, int index)
         {
             return arr.ToArray().Cut(index);
         }
 
-        public static bool IsObjectVisibleByCamera(this Camera camera, Vector3 objectPosition)
+        public static bool IsObjectVisible(this Camera camera, Vector3 objectPosition)
         {
             Vector3 viewPos = camera.WorldToViewportPoint(objectPosition);
 
-            return viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0;
+            return viewPos.x >= 0f && viewPos.x <= 1f && viewPos.y >= 0f && viewPos.y <= 1f && viewPos.z > 0f;
         }
-
-        public static TObject[] GetObjectsFromArray<TObject, TArray>(this TArray[] array, Func<TArray, TObject> selector)
+        
+        public static bool IsObjectVisible(this Camera camera, Bounds bounds)
         {
-            if (array == null)
-                throw new ArgumentNullException(nameof(array));
-            else if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
-
-            TObject[] objects = new TObject[array.Length];
-
+            return GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(camera), bounds);
+        }
+        
+        public static T Reduce<T, TElement>(this TElement[] array, Func<TElement, T, T> match, T obj)
+        {
             for (int i = 0; i < array.Length; i++)
             {
-                TObject obj = selector(array[i]);
-                if (obj == null)
-                    continue;
-                else
-                    objects[i] = obj;
+                obj = match(array[i], obj);
             }
 
-            return objects;
+            return obj;
         }
-
-        public static IList<TObject> GetObjectsFromArray<TObject, TArray>(this IList<TArray> array, Func<TArray, TObject> selector)
+        
+        public static T Reduce<T, TElement>(this IEnumerable<TElement> array, Func<TElement, T, T> match, T obj)
         {
-            if (array == null)
-                throw new ArgumentNullException(nameof(array));
-            else if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
-
-            List<TObject> objects = new(array.Count);
-
-            for (int i = 0; i < array.Count; i++)
-            {
-                TObject obj = selector(array[i]);
-                if (obj == null)
-                    continue;
-                else
-                    objects.Add(obj);
-            }
-
-            return objects;
-        }
-
-        public static IEnumerable<TObject> GetObjectsFromArray<TObject, TArray>(this IEnumerable<TArray> array, Func<TArray, TObject> selector)
-        {
-            if (array == null)
-                throw new ArgumentNullException(nameof(array));
-            else if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
-
             foreach (var item in array)
             {
-                TObject obj = selector(item);
-
-                if (obj == null)
-                    continue;
-                else
-                    yield return obj;
+                obj = match(item, obj);
             }
+
+            return obj;
         }
 
         public static Vector2 ScreenToWorldPoint2D(this Camera camera, Vector3 point)
@@ -373,20 +367,7 @@ namespace Kyzlyk.Helpers.Extensions
             return camera.ScreenPointToRay(point).GetPoint(Mathf.Abs(camera.transform.position.z));
         }
 
-        public static TFind FindIn<T, TFind>(this IEnumerable<T> array, Func<T, (TFind, bool)> match)
-        {
-            foreach (T item in array)
-            {
-                (TFind findedObject, bool isFind) = match(item);
-
-                if (isFind)
-                    return findedObject;
-            }
-
-            return default;
-        }
-
-        public static void Shake(this Camera camera, float duration, float magnitude, MonoBehaviour coroutineExecutor)
+        public static void Shake(this Camera camera, float duration, float magnitude, ICoroutineExecutor coroutineExecutor)
         {
             Vector3 origin = camera.transform.localPosition;
 
@@ -410,5 +391,105 @@ namespace Kyzlyk.Helpers.Extensions
 
             coroutineExecutor.StartCoroutine(Shake_Coroutine());
         }
+
+        public static (Segment Bottom, Segment Right, Segment Up, Segment Left) GetEdges(this Bounds bounds)
+        {
+            Vector2[] points = GetEdgePoints(bounds);
+            
+            return (new Segment(points[0], points[1]), 
+                new Segment(points[1], points[2]), 
+                new Segment(points[2], points[3]), 
+                new Segment(points[3], points[0]));
+        }
+        
+        public static Vector2[] GetEdgePoints(this Bounds bounds)
+        {
+            float halfWidth = bounds.size.x * .5f;
+            float halfHeight = bounds.size.y * .5f;
+
+            Vector2 bottomLeft = new(bounds.center.x - halfWidth, bounds.center.y - halfHeight);
+            Vector2 bottomRight = new(bounds.center.x + halfWidth, bounds.center.y - halfHeight);
+            Vector2 upRight = new(bottomRight.x, bounds.center.y + halfHeight);
+            Vector2 upLeft = new(bottomLeft.x, upRight.y);
+
+            return new Vector2[4]
+            {
+                bottomLeft,
+                bottomRight,
+                upRight,
+                upLeft
+            };
+        }
+                
+        public static void GetEdges(this Bounds bounds, out Vector2[] result)
+        {
+            float halfWidth = bounds.size.x * .5f;
+            float halfHeight = bounds.size.y * .5f;
+
+            Vector2 bottomLeft = new(bounds.center.x - halfWidth, bounds.center.y - halfHeight);
+            Vector2 bottomRight = new(bounds.center.x + halfWidth, bounds.center.y - halfHeight);
+            Vector2 upRight = new(bottomRight.x, bounds.center.y + halfHeight);
+            Vector2 upLeft = new(bottomLeft.x, upRight.y);
+
+            result = new Vector2[4]
+            {
+                bottomLeft, bottomRight, upRight, upLeft
+            };
+        }
+
+        public static void OverlapBounds2D(this Bounds bounds, Action<Vector2> action)
+        {
+            Vector2 startPoint = bounds.center.RoundToInt() - ((Vector2)bounds.size * .5f);
+            Vector2 current = startPoint;
+
+            int sizeX = Mathf.RoundToInt(bounds.size.x);
+            int sizeY = Mathf.RoundToInt(bounds.size.y);
+            for (int i = 0; i < sizeY; i++)
+            {
+                for (int j = 0; j < sizeX; j++)
+                {
+                    action(new Vector2(j, i) + (Vector2)bounds.center);
+                    current.x++;
+                }
+                
+                current.x = startPoint.x;
+                current.y++;
+            }
+        }
+
+        public static Vector3 GetSize(this Camera camera)
+        {
+            float height = camera.orthographicSize * 2f;
+            return new Vector3(height * camera.aspect, height, camera.depth);
+        }
+
+        public static string FirstToLower(this string text)
+        {
+            StringBuilder stringBuilder = new(text.Length);
+            
+            return stringBuilder
+                .Append(char.ToLower(text[0]))
+                .Append(text[1..])
+                .ToString();
+        }
+
+        public static T TryAddComponent<T>(this Component target) where T : Component
+        {
+            return target.gameObject.TryAddComponent<T>();
+        }
+        
+        public static T TryAddComponent<T>(this GameObject target) where T : Component
+        {
+            if (target.TryGetComponent<T>(out var component))
+                return component;
+            else
+                return target.AddComponent<T>();
+        }
+    }
+
+    public enum ArrayActionToHandleNull
+    {
+        ThrowException,
+        CreateNew
     }
 }

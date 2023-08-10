@@ -70,6 +70,39 @@ namespace Kyzlyk.Helpers.Math
             return (Abs(_x - other._x) <= tolerance) && (Abs(_y - other._y) <= tolerance);
         }
 
+        public UnitVector RoundToDirection()
+        {
+            Vector2 thisVector = Vector2;
+            
+            bool IsInResponsibilityAreaOf(Vector2 a, Vector2 b)
+                => Triangle.Contains(a, Vector2.zero, b, thisVector);
+
+            if (IsInResponsibilityAreaOf(new Vector2(-1f, 1f), new Vector2(1f, 1f)))
+                return Up;
+            
+            if (IsInResponsibilityAreaOf(new Vector2(-1f, -1f), new Vector2(1f, -1f)))
+                return Down;
+            
+            if (IsInResponsibilityAreaOf(new Vector2(-1f, 1f), new Vector2(-1f, -1f)))
+                return Left;
+            
+            if (IsInResponsibilityAreaOf(new Vector2(1f, 1f), new Vector2(1f, -1f)))
+                return Right;
+
+            return Zero;
+        }
+        
+        public UnitVector Round()
+        {
+            return new UnitVector(CeilWithMinus(_x), CeilWithMinus(_y));
+        }
+
+        private static float CeilWithMinus(float f)
+        {
+            float sign = Sign(f);
+            return Ceil(Abs(f)) * sign;
+        }
+
         public static bool IsUnit(float f, float scale = 1f)
         {
             scale = Abs(scale);
@@ -145,6 +178,31 @@ namespace Kyzlyk.Helpers.Math
             }
 
             return false;
+        }
+
+        public static UnitVector GetRandom()
+        {
+            return GetRandom(1);
+        }
+
+        public static UnitVector GetRandom(int partCount)
+        {
+            return GetRandom(partCount, 0f, 360f);
+        }
+
+        public static UnitVector GetRandom(int partCount, float startRangeDeg, float endRangeDeg)
+        {
+            float iterationDeg = (endRangeDeg - startRangeDeg) / partCount;
+            float currentDeg = startRangeDeg;
+
+            UnitVector[] vectors = new UnitVector[partCount];
+            for (int i = 0; i < partCount; i++)
+            {
+                vectors[i] = Deg360ToVector(currentDeg);
+                currentDeg += iterationDeg;
+            }
+
+            return vectors[UnityEngine.Random.Range(0, vectors.Length)];
         }
 
         public override int GetHashCode()

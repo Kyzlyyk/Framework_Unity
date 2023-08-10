@@ -16,8 +16,8 @@ namespace Kyzlyk.Helpers.Math
             Degrees = degrees;
             Center = center;
 
-            Arrowhead1 = GetVector(Center, GetArrowheadVector(Degrees, Angle), Radius);
-            Arrowhead2 = GetVector(Center, GetArrowheadVector(Degrees, -Angle), Radius);
+            Arrowhead1 = GetPoint(Center, GetArrowheadVector(Degrees, Angle), Radius);
+            Arrowhead2 = GetPoint(Center, GetArrowheadVector(Degrees, -Angle), Radius);
         }
 
         public CircleSector(float angle, UnitVector direction)
@@ -27,8 +27,8 @@ namespace Kyzlyk.Helpers.Math
             Degrees = VectorToDeg360(direction);
             Center = Vector2.zero;
 
-            Arrowhead1 = GetVector(Center, GetArrowheadVector(Degrees, Angle), Radius);
-            Arrowhead2 = GetVector(Center, GetArrowheadVector(Degrees, -Angle), Radius);
+            Arrowhead1 = GetPoint(Center, GetArrowheadVector(Degrees, Angle), Radius);
+            Arrowhead2 = GetPoint(Center, GetArrowheadVector(Degrees, -Angle), Radius);
         }
 
         public float Angle { get; }
@@ -44,7 +44,7 @@ namespace Kyzlyk.Helpers.Math
         private static UnitVector GetArrowheadVector(float degrees, float angle) =>
             Deg360ToVector(degrees + angle * 0.5f);
 
-#if true
+#if false
         [NotCompleted]
         public bool Contains(Vector2 point)
         {
@@ -81,7 +81,7 @@ namespace Kyzlyk.Helpers.Math
 
         public Vector2 GetArcPoint(UnitVector vector)
         {
-            return GetVector(Center, vector, Radius);
+            return GetPoint(Center, vector, Radius);
         }
 
         public void GoBetweenArrows(float degreesStep, Action<UnitVector> vectorHandler)

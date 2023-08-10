@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Kyzlyk.Helpers
 {
-    public class KeyList<TKey, TValue>
+    public class KeyList<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
     {
         public KeyList(int capacity)
         {
@@ -18,8 +19,8 @@ namespace Kyzlyk.Helpers
             set => _values[index] = value;
         }
 
-        private List<TKey> _keys;
-        private List<TValue> _values;
+        private readonly List<TKey> _keys;
+        private readonly List<TValue> _values;
 
         public void Add(TKey key, TValue value)
         {
@@ -108,6 +109,60 @@ namespace Kyzlyk.Helpers
         public TKey GetKey(int index)
         {
             return _keys[index];
+        }
+
+        public void Clear()
+        {
+            _keys.Clear();
+            _values.Clear();
+        }
+
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => new Enumerator(this);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        private struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
+        {
+            public Enumerator(KeyList<TKey, TValue> keyList)
+            {
+                if (keyList.Count == 0)
+                    Current = default;
+                else
+                    Current = new KeyValuePair<TKey, TValue>(keyList._keys[0], keyList._values[0]);
+
+                _keyList = keyList;
+                _index = 0;
+            }
+
+            public KeyValuePair<TKey, TValue> Current { get; private set; }
+            private int _index;
+            private readonly KeyList<TKey, TValue> _keyList;
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                if (_index >= _keyList.Count)
+                    return false;
+
+                Current = GetPairFromList(_index);
+                _index++;
+
+                return true;
+            }
+
+            private KeyValuePair<TKey, TValue> GetPairFromList(int index)
+            {
+                return new KeyValuePair<TKey, TValue>(_keyList._keys[index], _keyList._values[index]);
+            }
+
+            public void Reset()
+            {
+                _index = 0;
+            }
         }
     }
 }

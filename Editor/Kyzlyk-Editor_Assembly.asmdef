@@ -1,6 +1,6 @@
 {
     "name": "Kyzlyk-Editor_Assembly",
-    "rootNamespace": "",
+    "rootNamespace": "KyzlykEditor",
     "references": [
         "GUID:e93285f8c9d619d4bab7d90fa53f6f3d"
     ],
@@ -10,7 +10,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

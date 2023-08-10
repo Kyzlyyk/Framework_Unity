@@ -1,4 +1,4 @@
-namespace Kyzlyk.Helpers.Core
+namespace Kyzlyk.Core
 {
     public abstract class Processor
     {

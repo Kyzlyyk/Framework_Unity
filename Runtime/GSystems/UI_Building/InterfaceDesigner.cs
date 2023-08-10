@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using Kyzlyk.Helpers.Extensions;
-using Kyzlyk.Helpers.Core;
+using Kyzlyk.Core;
 
 namespace Kyzlyk.GSystems.UI_Building
 {
@@ -10,9 +10,9 @@ namespace Kyzlyk.GSystems.UI_Building
 
         private Element[] _elements;
 
-        public delegate void PointerHanlder(object sender, Touch touch);
-        public event PointerHanlder OnScreenTouched;
-        public event PointerHanlder OnScreenReleased;
+        public delegate void TouchHanlder(object sender, Touch touch);
+        public event TouchHanlder OnScreenTouched;
+        public event TouchHanlder OnScreenReleased;
 
         private bool _pointerDown;
         private float _holdingTimer;
@@ -23,6 +23,13 @@ namespace Kyzlyk.GSystems.UI_Building
         private int _lastTouchCount;
 
         protected override bool IsPersistance => false;
+
+        private Camera _camera;
+
+        private void Awake()
+        {
+            _camera = Camera.main;
+        }
 
         private void Update()
         {
@@ -79,6 +86,16 @@ namespace Kyzlyk.GSystems.UI_Building
         {
             OnScreenTouched(this, touch);
             _pointerDown = true;
+        }
+
+        public Vector2 GetWorldPosition(Vector2 canvasPosition)
+        {
+            return _camera.ScreenToWorldPoint2D(canvasPosition);
+        }
+        
+        public Vector2 GetCanvasPosition(Vector2 worldPosition)
+        {
+            return _camera.WorldToScreenPoint(worldPosition);
         }
 
         /// <summary>

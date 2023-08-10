@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Kyzlyk.Helpers.Core
+namespace Kyzlyk.Core
 {
     public class Buffer : Stack<ICoreProvider>
     {

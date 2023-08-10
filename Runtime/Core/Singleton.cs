@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Kyzlyk.Helpers.Core
+namespace Kyzlyk.Core
 {
     public abstract class Singleton<T> : Singleton where T : MonoBehaviour
     {

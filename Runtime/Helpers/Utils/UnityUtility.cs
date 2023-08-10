@@ -117,12 +117,37 @@ namespace Kyzlyk.Helpers.Utils
             return new Color(Random(), Random(), Random());
         }
 
+#if UNITY_EDITOR
         public static void ClearDebugConsole()
         {
             Assembly assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
             Type type = assembly.GetType("UnityEditor.LogEntries");
             MethodInfo method = type.GetMethod("Clear");
             method.Invoke(new object(), null);
+        }
+#endif
+
+        public static Vector3 AccelerationToEuler()
+        {
+            Vector3 acceleration = Input.acceleration;
+            return new Vector3(acceleration.z, acceleration.y, acceleration.x);
+        }
+
+        public static Vector3 ExceptZero(Vector3 vector3)
+        {
+            static float RoundZero(float f)
+            {
+                if (Mathf.Approximately(f, 0f))
+                    return f;
+
+                return f;
+            }
+
+            vector3.x = RoundZero(vector3.x);
+            vector3.y = RoundZero(vector3.y);
+            vector3.z = RoundZero(vector3.z);
+
+            return vector3;
         }
     }
 }

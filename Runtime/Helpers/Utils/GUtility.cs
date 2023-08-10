@@ -94,46 +94,6 @@ namespace Kyzlyk.Helpers.Utils
             (arr[j], arr[i]) = (arr[i], arr[j]);
         }
 
-        public static string HandleFieldName(string fieldName, char separator = ' ', bool upperBeforeSeparator = true, params char[] exclude)
-        {
-            if (string.IsNullOrEmpty(fieldName))
-                return string.Empty;
-
-            StringBuilder stringBuilder = new();
-
-            char previousChar = '\0';
-
-            for (int i = 0; i < fieldName.Length; i++)
-            {
-                if (exclude.Contains(fieldName[i]))
-                {
-                    if (previousChar != '\0')
-                    {
-                        stringBuilder.Append(separator);
-                        previousChar = separator;
-                    }
-
-                    continue;
-                }
-
-                if (upperBeforeSeparator && (previousChar == separator || previousChar == '\0'))
-                    stringBuilder.Append(char.ToUpper(fieldName[i]));
-
-                else if (char.IsLower(previousChar) && char.IsUpper(fieldName[i]))
-                {
-                    stringBuilder.Append(separator);
-                    stringBuilder.Append(upperBeforeSeparator ? fieldName[i] : char.ToLower(fieldName[i]));
-                }
-
-                else
-                    stringBuilder.Append(fieldName[i]);
-
-                previousChar = fieldName[i];
-            }
-
-            return stringBuilder.ToString();
-        }
-
         public static IEnumerable<T> GetAllAttributes<T>() where T : Attribute
         {
             return Assembly.GetExecutingAssembly().GetCustomAttributes<T>();

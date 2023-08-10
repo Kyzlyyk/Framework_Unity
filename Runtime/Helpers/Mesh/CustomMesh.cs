@@ -34,7 +34,7 @@ namespace Kyzlyk.Helpers.GMesh
             Mesh.RecalculateBounds();
         }
 
-        public virtual void Reset()
+        public virtual void Clear()
         {
             ClearStructure();
         }

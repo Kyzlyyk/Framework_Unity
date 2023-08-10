@@ -24,7 +24,7 @@ namespace Kyzlyk.Helpers
 
     public enum Side
     {
-        None = 0,
+        Zero = 0,
         Right = 1,
         Left = 2,
         Top = 3,
